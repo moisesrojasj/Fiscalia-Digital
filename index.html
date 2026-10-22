@@ -1,4 +1,4 @@
-<title>Fiscalía Digital Transparente</title>
+<title>Carpetas que no se cierran</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -294,14 +294,51 @@ footer .wrap{padding-block:16px;font-size:.8rem;color:var(--muted);display:flex;
   .hero .wrap{padding-block:30px}
 }
 </style>
+<style>
+.arch{width:100%;height:auto;display:block}
+.arch .n{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+.arch .db{fill:var(--warn-soft);stroke:var(--warn);stroke-width:1.5}
+.arch .core{fill:var(--data-soft);stroke:var(--data);stroke-width:2}
+.arch .bad{fill:var(--accent-soft);stroke:var(--accent);stroke-width:2}
+.arch text{fill:var(--ink);font-family:var(--f-body);font-size:12px}
+.arch .s{fill:var(--muted);font-size:10.5px}
+.arch .t{font-family:var(--f-display);font-weight:700;font-size:14px}
+.arch .ln{stroke:var(--data);stroke-width:2;fill:none}
+.arch .ln.br{stroke:var(--accent);stroke-dasharray:5 5}
+.arch .ln.gr{stroke:var(--muted);stroke-dasharray:3 4}
+.arch .x{fill:var(--accent);font-weight:700;font-size:16px}
+.sim{display:grid;gap:14px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;width:max-content;max-width:100%}
+.seg button{background:var(--surface);border:0;padding:8px 14px;font:600 .9rem var(--f-body);color:var(--muted);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.result{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.result>div{min-width:0}
+.rcard{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);padding:16px;display:grid;gap:8px;align-content:start}
+.rcard .row{display:flex;justify-content:space-between;gap:10px;font-size:.9rem;border-bottom:1px dashed var(--line);padding-bottom:6px}
+.rcard .row span:first-child{color:var(--muted)}
+.state{font-family:var(--f-display);font-size:1.5rem;font-weight:700}
+.state.bad{color:var(--accent)} .state.good{color:var(--ok)}
+.journey{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.journey div{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px;display:grid;gap:4px;align-content:start;min-width:0}
+.journey .k{font-family:var(--f-mono);font-size:.76rem;color:var(--muted)}
+.journey b{font-size:.95rem}
+.journey p{font-size:.84rem;color:var(--muted)}
+.journey .hurt{border-color:var(--accent);background:var(--accent-soft)}
+.vs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.vs>div{min-width:0}
+.tag{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.tag.red{color:var(--accent)} .tag.teal{color:var(--data)}
+@media (max-width:860px){.journey{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.journey,.result,.vs{grid-template-columns:1fr}}
+</style>
 
 <header class="topbar">
   <div class="wrap">
     <button class="brand" id="home-btn" type="button" aria-label="Ir a la portada">
       <span class="seal">MP</span>
-      <span><b>Fiscalía Digital Transparente</b><small>Plan de Transformación Digital 2027–2030</small></span>
+      <span><b>Carpetas que no se cierran</b><small>Caso de estudio · Ministerio Público – FN</small></span>
     </button>
-    <nav class="dots" id="dots" aria-label="Puntos del plan"></nav>
+    <nav class="dots" id="dots" aria-label="Partes del caso"></nav>
     <button class="tool" id="fs-btn" type="button" title="Pantalla completa (F)">Pantalla completa</button>
   </div>
 </header>
@@ -310,406 +347,258 @@ footer .wrap{padding-block:16px;font-size:.8rem;color:var(--muted);display:flex;
 
 <footer>
   <div class="wrap">
-    <span>Propuesta académica · Doctorado en Gobierno y Transformación Digital, UNI · Lima, octubre 2026. No representa la posición oficial del Ministerio Público.</span>
+    <span>Caso de estudio académico · Doctorado en Gobierno y Transformación Digital, UNI · Lima, octubre 2026. No representa la posición oficial del Ministerio Público.</span>
     <span>Navega con <span class="kbd">←</span> <span class="kbd">→</span> · <span class="kbd">Inicio</span> vuelve a la portada</span>
   </div>
 </footer>
 
 <script>
 const S = [
- {id:"resolucion", t:"Proyecto de Resolución", s:"El acto que aprueba el Plan y lo declara prioridad institucional permanente.", ref:"RFN N° ___-2026-MP-FN"},
- {id:"generales", t:"Disposiciones generales", s:"Finalidad, objetivo al 2030, siete objetivos específicos, alcance y base legal.", ref:"Título I"},
- {id:"diagnostico", t:"Diagnóstico del estado actual", s:"Trayectoria 2020–2026, 6,1 % de ejecución, FODA y el referente de España.", ref:"Título II"},
- {id:"niveles", t:"Niveles y dominios", s:"De escanear papel a decidir con datos: procesos, productos, EX y CX.", ref:"Título III"},
- {id:"marco", t:"Marco de transformación", s:"Seis elementos y ocho capas de arquitectura, con el blindaje como base.", ref:"Título IV"},
- {id:"blindaje", t:"Desafíos y blindaje", s:"Cuatro desafíos clásicos, la inestabilidad política y diez mecanismos de protección.", ref:"Título V"},
- {id:"estrategia", t:"Estrategia e implementación", s:"Catorce pasos, hoja de ruta en cinco fases y presupuesto de S/ 125 M.", ref:"Título VI"},
- {id:"kpis", t:"Claves para medir el éxito", s:"Dieciséis indicadores de valor público, con línea base y meta 2030.", ref:"Título VII"},
- {id:"gobernanza", t:"Gobernanza y riesgos", s:"Órganos de gobierno y matriz de riesgos con su mitigación.", ref:"Título VIII"},
- {id:"disposiciones", t:"Disposiciones complementarias", s:"Plazos para la directiva, el anteproyecto de ley y la formación.", ref:"Disposiciones"},
- {id:"anexos", t:"Anexos", s:"Cronología de la Fiscalía Digital de España, matriz RACI y fuentes.", ref:"Anexos 1–3"}
+ {id:"problema", t:"La problemática", s:"Una Fiscalía fragmentada: papel, silos, baja ejecución y datos que no se hablan.", ref:"Parte 1"},
+ {id:"ciudadano", t:"El caso que sigue “abierto”", s:"Cómo un caso archivado en provincia termina cerrándole puertas a una persona.", ref:"Parte 2"},
+ {id:"causa", t:"La causa técnica", s:"Un miniservidor de base de datos en cada oficina fiscal y ninguna fuente única de verdad.", ref:"Parte 3"},
+ {id:"ejes", t:"Desarrollo y ejes", s:"Seis ejes que ordenan la solución: tecnología, datos, procesos, normas, personas y continuidad.", ref:"Parte 4"},
+ {id:"solucion", t:"La solución tecnológica", s:"Base de datos centralizada en Lima, con contingencia, interoperabilidad y migración por etapas.", ref:"Parte 5"},
+ {id:"resultados", t:"Resultados esperados", s:"Qué cambia y cómo se mide: indicadores con línea base y meta.", ref:"Parte 6"},
+ {id:"fiscalia", t:"Impacto en la Fiscalía", s:"Gestión, control, productividad y confianza institucional.", ref:"Parte 7"},
+ {id:"ciudadania", t:"Impacto en la ciudadanía", s:"Antecedentes correctos, acceso al caso y menos trámites.", ref:"Parte 8"},
+ {id:"riesgos", t:"Riesgos y sostenibilidad", s:"Lo que puede fallar y cómo blindar el proyecto frente a la inestabilidad.", ref:"Parte 9"},
+ {id:"conclusiones", t:"Conclusiones", s:"Tres ideas para cerrar la exposición.", ref:"Parte 10"}
 ];
 
 const pad = n => String(n).padStart(2,"0");
 const list = a => `<ul class="clean">${a.map(x=>`<li>${x}</li>`).join("")}</ul>`;
 const table = (h,rows) => `<div class="tbl-wrap"><table><thead><tr>${h.map(x=>`<th>${x}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
 const block = (title, sub, body) => `<section class="block"><h3>${title}${sub?` <span class="mono">${sub}</span>`:""}</h3>${body}</section>`;
+const panels = a => `<div class="cols">${a.map(([b,p,pill])=>`<div class="panel" style="display:grid;gap:6px;align-content:start">${pill?`<span>${pill}</span>`:""}<b>${b}</b><span style="font-size:.9rem;color:var(--muted)">${p}</span></div>`).join("")}</div>`;
 
-/* ---------- contenido de cada punto ---------- */
+/* diagramas de arquitectura */
+const archHoy = () => `<svg class="arch" viewBox="15 0 640 330" role="img" aria-label="Arquitectura actual: cada distrito con su base local y sincronización irregular hacia la consulta nacional">
+ <rect class="bad" x="225" y="18" width="190" height="62" rx="10"/>
+ <text class="t" x="320" y="44" text-anchor="middle">Consulta nacional</text>
+ <text class="s" x="320" y="64" text-anchor="middle">ve solo lo que llegó a sincronizarse</text>
+ ${[["Lima Sur",40,"sincroniza",0],["Cusco",165,"desfase",1],["Piura",290,"sin envío",1],["Loreto",415,"desfase",1],["… 30 más",540,"variable",2]].map(([n,x,st,k])=>`
+  <path class="ln ${k===0?"":k===1?"br":"gr"}" d="M${x+45} 200 C ${x+45} 140, 320 130, 320 80"/>
+  ${k===1?`<text class="x" x="${(x+45+320)/2-4}" y="${150}">✕</text>`:""}
+  <rect class="n" x="${x}" y="200" width="90" height="46" rx="8"/>
+  <text x="${x+45}" y="222" text-anchor="middle" style="font-weight:600">${n}</text>
+  <text class="s" x="${x+45}" y="238" text-anchor="middle">${st}</text>
+  <rect class="db" x="${x+3}" y="262" width="84" height="44" rx="6"/>
+  <text class="s" x="${x+45}" y="282" text-anchor="middle">BD local</text>
+  <text class="s" x="${x+45}" y="296" text-anchor="middle">miniservidor</text>
+  <line x1="${x+45}" y1="246" x2="${x+45}" y2="262" stroke="var(--line)" stroke-width="1.5"/>`).join("")}
+</svg>`;
+
+const archProp = () => `<svg class="arch" viewBox="0 0 640 360" role="img" aria-label="Arquitectura propuesta: oficinas fiscales como clientes web de una base central en Lima con data center de contingencia e interoperabilidad">
+ <rect class="core" x="200" y="20" width="240" height="78" rx="12"/>
+ <text class="t" x="320" y="48" text-anchor="middle">BD central · Lima</text>
+ <text class="s" x="320" y="66" text-anchor="middle">fuente única de verdad del caso fiscal</text>
+ <text class="s" x="320" y="82" text-anchor="middle">servidor + gestor de BD + Sistema CFE</text>
+ <rect class="n" x="18" y="30" width="140" height="58" rx="10"/>
+ <text x="88" y="54" text-anchor="middle" style="font-weight:600">DC de contingencia</text>
+ <text class="s" x="88" y="72" text-anchor="middle">réplica en tiempo real</text>
+ <path class="ln" d="M158 59 L200 59"/>
+ <rect class="n" x="482" y="30" width="140" height="58" rx="10"/>
+ <text x="552" y="54" text-anchor="middle" style="font-weight:600">PIDE</text>
+ <text class="s" x="552" y="72" text-anchor="middle">PJ · PNP · RENIEC · INPE</text>
+ <path class="ln" d="M440 59 L482 59"/>
+ ${[["Lima Sur",40],["Cusco",165],["Piura",290],["Loreto",415],["… 30 más",540]].map(([n,x])=>`
+  <path class="ln" d="M${x+45} 220 C ${x+45} 160, 320 150, 320 98"/>
+  <rect class="n" x="${x}" y="220" width="90" height="50" rx="8"/>
+  <text x="${x+45}" y="242" text-anchor="middle" style="font-weight:600">${n}</text>
+  <text class="s" x="${x+45}" y="259" text-anchor="middle">cliente web</text>`).join("")}
+ <rect class="n" x="150" y="300" width="340" height="44" rx="10"/>
+ <text x="320" y="320" text-anchor="middle" style="font-weight:600">Consulta nacional y “Mi Carpeta”</text>
+ <text class="s" x="320" y="336" text-anchor="middle">leen de la misma base: el estado se actualiza al instante</text>
+</svg>`;
+
 const V = {};
 
-V.resolucion = () => `
-${block("Vistos y considerandos","", `<div class="timeline">
-  ${[
-   ["Constitución, arts. 158–159","El MP conduce la investigación del delito y ejerce la acción penal pública."],
-   ["08/07/2020 · Préstamo BID 4959/OC-PE","Financia la mejora de la justicia penal (PJ + MP), donde se inscribe la Carpeta Fiscal Electrónica."],
-   ["2025 · Leyes 32374 y 32348","Remisión digital de la carpeta fiscal y Sistema Nacional de Flagrancia: soporte legal del expediente electrónico."],
-   ["03/09/2025 · Ejecución de 6,1 %","De S/ 125 M asignados. Se necesita un instrumento que asegure continuidad, gobernanza y medición.",1],
-   ["02/09/2026 · RFN 2696-2026-MP-FN","Aprueba el Sistema CFE, su interoperabilidad con el EJE y el piloto de Flagrancia en Lima Sur."],
-   ["DL 1412 · DU 006-2020 · PNTD 2030","Marco de Gobierno Digital y Transformación Digital del Estado."]
-  ].map(([d,x,r])=>`<div class="tl${r?" red":""}"><span class="d">${d}</span><span style="display:block">${x}</span></div>`).join("")}
-</div>`)}
-${block("Se resuelve","4 artículos", `<div class="articles">
-  <div class="art"><span class="pill">Artículo 1</span><h4>Aprobar el Plan</h4><p>“Fiscalía Digital Transparente 2027–2030” como anexo de la resolución.</p></div>
-  <div class="art key"><span class="pill red">Artículo 2 · clave</span><h4>Prioridad institucional permanente</h4><p>Modificarlo, suspenderlo o desactivarlo exige informe técnico del Comité de TD, opinión del Consejo Consultivo y acuerdo de la Junta de Fiscales Supremos.</p></div>
-  <div class="art"><span class="pill">Artículo 3</span><h4>Implementar y reportar</h4><p>Gerencia General, UE 011 y OGTI ejecutan; el avance se publica cada trimestre en el Portal de Transparencia.</p></div>
-  <div class="art"><span class="pill">Artículo 4</span><h4>Publicar</h4><p>En El Peruano y en la sede digital gob.pe/mpfn.</p></div>
-</div>`)}
-<div class="callout"><b>Idea fuerza:</b> el artículo 2 convierte una decisión de gestión en un compromiso colegiado. Ninguna jefatura puede detener el Plan por sí sola.</div>`;
-
-V.generales = () => `
-${block("Finalidad","Art. 1", `<p class="quote">Que la investigación y persecución del delito se desarrolle sobre un Expediente Fiscal Electrónico que garantice la seguridad, integridad, trazabilidad y transparencia de cada actuación.</p>`)}
-${block("Objetivo general al 31/12/2030","Art. 2", `<div class="goal">
-  <div><div class="n">100 %</div><span>de carpetas fiscales nuevas en la CFE</span></div>
-  <div><div class="n">34</div><span>distritos fiscales, interoperando con PJ y PNP</span></div>
-  <div><div class="n">1</div><span>tablero público de desempeño con trazabilidad completa</span></div>
-</div>`)}
-${block("Objetivos específicos","Art. 3", `<div class="oe">${[
- ["OE1","Procesos","Rediseñar y digitalizar de extremo a extremo el proceso penal, empezando por flagrancia."],
- ["OE2","Seguridad e integridad","Firma digital, sellado de tiempo y registro inmutable de accesos."],
- ["OE3","Transparencia","Reparto aleatorio auditable, Casilla Fiscal Electrónica y “Mi Carpeta” ciudadana."],
- ["OE4","Interoperabilidad","CFE integrada con EJE, PNP, INPE, RENIEC, Medicina Legal y PIDE."],
- ["OE5","Talento y cultura","Competencias digitales y cultura orientada al dato."],
- ["OE6","Gestión basada en datos","Observatorio fiscal tipo DATALAB, analítica e IA responsable."],
- ["OE7","Sostenibilidad","Blindar el Plan frente a la inestabilidad política."]
-].map(([c,b,p])=>`<div><span class="code">${c}</span><b>${b}</b><p>${p}</p></div>`).join("")}</div>`)}
-${block("Alcance","Art. 4", `<div class="panel">Obligatorio para todos los órganos fiscales, la UE 011, Medicina Legal y la Escuela del MP en los <b>34 distritos fiscales</b>. Primera etapa: <b>proceso penal común y proceso inmediato (flagrancia)</b>. Civil, familia y prevención se suman en el escalamiento.</div>`)}
-${block("Base legal","Art. 5", `<div class="chips">${["Constitución 2, 158, 159","DL 052 – LOMP","NCPP (DL 957)","Ley 32374","Ley 32348","DL 1412 Gobierno Digital","DU 006-2020","DU 007-2020 Confianza Digital","DS 085-2023-PCM (PNTD 2030)","Ley 27269 Firmas digitales","Ley 29733 Datos personales","Ley 27806 Transparencia","Ley 31814 IA","Ley 30096 Delitos informáticos","BID 4959/OC-PE","RFN 2696-2026-MP-FN","PEI 2023–2030","NTP-ISO/IEC 27001"].map(x=>`<span class="chip${/32374|32348|2696/.test(x)?" hot":""}">${x}</span>`).join("")}</div>`)}
-${block("Definiciones","Art. 6", `<div class="gloss">${[
- ["EFE / CFE","Datos estructurados y documentos firmados que forman la investigación: “del documento al dato”."],
- ["EJE","Expediente Judicial Electrónico del Poder Judicial."],
- ["Casilla Fiscal Electrónica","Domicilio digital para notificar a partes y abogados."],
- ["Registro inmutable","Bitácora de accesos que no se puede alterar (sellado de tiempo, hash encadenado)."],
- ["Reparto aleatorio auditable","Asignación automática de casos con reglas públicas y registro verificable."],
- ["PMO Digital","Oficina de Gestión del Programa, a cargo de la UE 011."]
-].map(([b,s])=>`<div><b>${b}</b><span>${s}</span></div>`).join("")}</div>`)}`;
-
-V.diagnostico = () => `
+V.problema = () => `
 <div class="cols">
- ${block("Trayectoria 2020–2026","2.1", `<div class="timeline">${[
-  ["08/07/2020","Préstamo BID 4959/OC-PE","US$ 100 M para PJ + MP"],
-  ["24/09/2020","Se crea la UE 011","RFN 1049-2020-MP-FN"],
-  ["05/11/2020","Manual Operativo del Programa","RFN 1226-2020-MP-FN"],
-  ["2021–2025","Crisis en la Fiscalía de la Nación","Cambios sucesivos de jefatura; el proyecto se ralentiza",1],
-  ["11/06/2024","Actualización del MOP","RGG 000355-2024-MP-FN-GG"],
-  ["Jun. 2025","Remisión digital de la carpeta","Ley 32374 modifica el NCPP"],
-  ["03/09/2025","6,1 % de ejecución","De S/ 125 M asignados (PCM)",1],
-  ["07/05/2026","Se reconforma la Comisión CFE","RFN 1320-2026-MP-FN"],
-  ["02/09/2026","Sistema CFE + piloto Lima Sur","RFN 2696-2026-MP-FN"]
- ].map(([d,b,s,r])=>`<div class="tl${r?" red":""}"><span class="d">${d}</span><b>${b}</b><span>${s}</span></div>`).join("")}</div>`)}
- <div class="block" style="align-content:start">
-  <h3>El síntoma <span class="mono">2.2</span></h3>
-  <div class="panel gauge">
-   <span class="eyebrow">Ejecución presupuestal CFE · set. 2025</span>
-   <span class="big tnum">6,1 %</span>
-   <div class="bar" role="img" aria-label="6,1 por ciento de 125 millones de soles"><div class="fill" style="width:6.1%"></div></div>
-   <div class="lbls tnum"><span>≈ S/ 7,6 M ejecutados</span><span>S/ 125 M asignados</span></div>
-  </div>
-  <div class="panel gauge">
-   <span class="eyebrow">Percepción de corrupción · Ipsos-Proética 2025</span>
-   <span class="big tnum">35 %</span>
-   <span style="font-size:.9rem;color:var(--muted)">El MP es percibido como la 2.ª institución más corrupta del país.</span>
-  </div>
- </div>
+ <div class="panel gauge"><span class="eyebrow">Ejecución de la Carpeta Fiscal Electrónica · set. 2025</span><span class="big tnum">6,1 %</span>
+  <div class="bar" role="img" aria-label="6,1 por ciento de 125 millones"><div class="fill" style="width:6.1%"></div></div>
+  <div class="lbls tnum"><span>≈ S/ 7,6 M</span><span>S/ 125 M asignados</span></div></div>
+ <div class="panel gauge"><span class="eyebrow">Percepción de corrupción · Ipsos-Proética 2025</span><span class="big tnum">35 %</span>
+  <span style="font-size:.9rem;color:var(--muted)">El MP es percibido como la 2.ª institución más corrupta del país.</span></div>
 </div>
-${block("Problemática identificada","2.2", `<div class="cols">${[
- ["Discontinuidad política","Varias jefaturas entre 2021 y 2026; el proyecto quedó truncado en su fase crítica (2021–2022).","red"],
- ["Baja ejecución","6,1 % al 2025; en el POA 2024 el componente MP recibió S/ 110 mil (0,2 %) de S/ 68,8 M.","red"],
- ["Asimetría con el PJ","El EJE opera en cientos de juzgados; la CFE recién inicia en un distrito.","warn"],
- ["Carpetas en papel","Pérdida, sustracción, alteración de folios y megacasos inmanejables.","warn"],
- ["Sistemas en silos","SGF y aplicativos aislados, sin datos estructurados ni estándares.","warn"],
- ["Brecha digital","Competencias limitadas en fiscales y personal; resistencia al cambio.","warn"]
-].map(([b,p,c])=>`<div class="panel" style="display:grid;gap:6px"><span class="pill ${c}">${c==="red"?"Crítico":"Alto"}</span><b>${b}</b><span style="font-size:.9rem;color:var(--muted)">${p}</span></div>`).join("")}</div>`)}
-${block("Análisis FODA","2.3", `<div class="foda">
- <div class="f"><h4>Fortalezas</h4><ul><li>Financiamiento BID ya contratado</li><li>UE 011 y MOP constituidos</li><li>Base legal reciente (Leyes 32374, 32348; RFN 2696-2026)</li><li>Piloto Lima Sur aprobado</li></ul></div>
- <div class="o"><h4>Oportunidades</h4><ul><li>EJE del PJ maduro para interoperar</li><li>Política Nacional de TD al 2030 y PIDE</li><li>Firma digital y RENIEC disponibles</li><li>Referente: Fiscalía Digital de España</li></ul></div>
- <div class="d"><h4>Debilidades</h4><ul><li>Ejecución de 6,1 %</li><li>Rotación de equipos y jefaturas</li><li>Sistemas heredados en silos</li><li>Brecha de competencias digitales</li></ul></div>
- <div class="a"><h4>Amenazas</h4><ul><li>Inestabilidad política</li><li>Ciberataques a información sensible</li><li>Recortes presupuestales</li><li>Captura por intereses que se benefician de la opacidad</li></ul></div>
-</div>`)}
-${block("Referente internacional: Fiscalía Digital de España","2.4", table(["Elemento","Qué hizo España","Lección para el MP-FN"],[
- ["<b>Piloto Valladolid (2016)</b>","~100 usuarios: Fortuny, Portafirmas, gestor documental y visor Horus.","Empezar pequeño y escalar: Lima Sur cumple ese rol."],
- ["<b>Fortuny → Atenea</b>","Gestión procesal que evolucionó a plataforma interoperable con juzgados.","Diseñar desde el inicio para interoperar con el EJE."],
- ["<b>Horus</b>","Visor del expediente judicial completo en pantalla.","Visor único de carpeta + expediente judicial."],
- ["<b>LexNET</b>","68 millones de comunicaciones electrónicas en 2016.","Casilla Fiscal integrada a la casilla del PJ."],
- ["<b>CTEAJE</b>","Comité técnico que coordina 13 administraciones.","Consejo Interinstitucional MP–PJ–PNP–MINJUS–PCM."],
- ["<b>RDL 6/2023 y LO 1/2025</b>","Expediente como datos estructurados y plazos de interoperabilidad.","Blindaje normativo con rango de ley."],
- ["<b>DATALAB (2023)</b>","Cuadros de mando y acceso ciudadano con Cl@ve.","Observatorio fiscal y “Mi Carpeta”."],
- ["<b>Fragmentación</b> <span class='pill warn'>riesgo</span>","Trece sistemas distintos complicaron la interoperabilidad.","Un único estándar nacional, no sistemas por distrito."]
-]))}`;
-
-V.niveles = () => `
-${block("Tres niveles de evolución tecnológica","3.1", `<div class="stairs">
- <div class="step"><span class="k">Nivel 1</span><h4>Digitación</h4><p>Pasar información física a formato digital.</p><p class="now"><b>Hoy:</b> escaneo parcial; PDFs sin estructura ni firma.</p></div>
- <div class="step"><span class="k">Nivel 2</span><h4>Digitalización</h4><p>Automatizar e interconectar flujos de trabajo.</p><p class="now"><b>Hoy:</b> SGF aislado; piloto CFE en Lima Sur (2026).</p><p class="now">Meta 2027–2029: CFE nacional con firma e interoperabilidad con el EJE.</p></div>
- <div class="step"><span class="k">Nivel 3 · objetivo</span><h4>Transformación digital</h4><p>Reorganizar la institución en torno al dato.</p><p class="now"><b>Hoy:</b> inexistente.</p><p class="now">Meta 2029–2030: reparto aleatorio, observatorio, IA responsable y servicios ciudadanos.</p></div>
-</div>
-<div class="callout"><b>Error histórico:</b> confundir el nivel 1 (escanear carpetas) con la transformación. El Plan apunta al nivel 3.</div>`)}
-${block("Flujo de flagrancia de extremo a extremo","Ley 32348", `<div class="flow" role="img" aria-label="Flujo PNP a MP a PJ en menos de 48 horas">
- <div class="node"><b>PNP</b><span>Denuncia y atestado digital con código único</span></div><div class="arrow">→</div>
- <div class="node"><b>MP · CFE</b><span>Reparto aleatorio, firma digital y requerimiento</span></div><div class="arrow">→</div>
- <div class="node"><b>PJ · EJE</b><span>Remisión digital (Ley 32374) y audiencia</span></div>
-</div>
-<div class="clock"><span class="pill teal">Meta</span> Todo el circuito en digital en <b>menos de 48 horas</b>.</div>`)}
-${block("Cuatro dominios de transformación","3.2–3.5", `<div class="tabs" role="tablist" id="dom-tabs">
- ${["Procesos","Productos y servicios","Experiencia del empleado","Experiencia del ciudadano"].map((x,i)=>`<button role="tab" type="button" aria-selected="${i===0}" data-i="${i}">${x}</button>`).join("")}
-</div>
-<div id="dom-panel"></div>`)}`;
-
-const DOM = [
- () => `<p style="color:var(--muted);margin-bottom:12px">Tres palancas: consolidar flujos redundantes, crear flujos inteligentes y automatizar tareas manuales.</p><div class="cols">${[
-  ["Recepción única de denuncias","Presencial, PNP y en línea; genera la CFE con código compartido."],
-  ["Reparto aleatorio y auditable","Reglas públicas y bitácora verificable, sin asignación discrecional."],
-  ["Firma digital y sellado de tiempo","En disposiciones, requerimientos y actas, con plantillas inteligentes."],
-  ["Notificación electrónica","A partes y abogados por la Casilla Fiscal Electrónica."],
-  ["Plazos con alertas","Semáforo automático de plazos de investigación y detenciones."],
-  ["Cadena de custodia digital","Evidencias con hash y trazabilidad."],
-  ["Remisión digital al PJ","Por interoperabilidad, según la Ley 32374."]
- ].map(([b,p])=>`<div class="panel" style="display:grid;gap:4px"><b>${b}</b><span style="font-size:.9rem;color:var(--muted)">${p}</span></div>`).join("")}</div>`,
- () => table(["Producto","Descripción","Usuario"],[
-  ["<b>Sistema CFE</b>","Núcleo de gestión con datos estructurados, firma y bitácora inmutable.","Fiscales y asistentes"],
-  ["<b>Visor Fiscal Integrado</b> (tipo Horus)","Carpeta y expediente judicial en una sola vista, con búsqueda.","Fiscales"],
-  ["<b>Casilla Fiscal Electrónica</b>","Notificaciones y escritos, integrada a la casilla del PJ.","Abogados y partes"],
-  ["<b>Mesa de Partes Digital</b>","Denuncias y escritos 24/7.","Ciudadanía"],
-  ["<b>“Mi Carpeta”</b>","Estado del caso en línea con identidad digital (RENIEC / ID Gob.pe).","Víctimas, imputados, abogados"],
-  ["<b>Observatorio Fiscal</b> (tipo DATALAB)","Carga, plazos, productividad y datos abiertos anonimizados.","Jefaturas, ciudadanía, academia"],
-  ["<b>Asistente IA</b> <span class='pill'>fase 4</span>","Resumen de megacasos y búsqueda de precedentes, con supervisión humana.","Fiscales"]
- ]),
- () => list([
-  "Interfaz diseñada con fiscales (service design) y probada en Lima Sur antes de escalar.",
-  "Firma digital en token o en la nube; acceso seguro con VPN y doble factor.",
-  "Red de <b>Fiscales Embajadores Digitales</b> en cada distrito fiscal.",
-  "Formación certificada por la Escuela del MP, vinculada a la evaluación de desempeño.",
-  "Mesa de ayuda 24/7 y <b>hipercuidado de 90 días</b> en cada despliegue.",
-  "Menos foliado, copias y traslados: más tiempo para investigar.",
-  "Encuesta semestral de satisfacción interna (eNPS)."
- ]),
- () => `<div class="callout teal" style="margin-bottom:12px"><b>El “cliente” es el ciudadano justiciable:</b> víctima, denunciante, imputado y su defensa. La CX convierte la CFE en un instrumento de confianza.</div>` + list([
-  "<b>“Mi Carpeta”:</b> estado, fiscal a cargo, plazos y próximas diligencias, con reserva de lo protegido por ley.",
-  "<b>Trazabilidad visible:</b> la parte ve quién accedió a su carpeta y cuándo.",
-  "Notificaciones por SMS o correo de cada actuación relevante.",
-  "Canal preferente para víctimas y seguimiento de medidas de protección.",
-  "Datos abiertos anonimizados por distrito fiscal.",
-  "Atención en lenguas originarias y presencial asistida para quien no tiene acceso digital."
- ])
-];
-
-V.marco = () => `
-${block("Seis elementos del marco","4.1", `<div class="ring">${[
- ["1","Visión y objetivos","“Al 2030, una Fiscalía 100 % digital, segura y transparente, donde cada caso es trazable”. OE1–OE7."],
- ["2","Evaluación inicial","Auditoría de la UE 011, inventario de sistemas e infraestructura, líneas base."],
- ["3","Hoja de ruta","Cuatro fases 2026–2030: fundamentos, piloto, escalamiento, dato."],
- ["4","Gestión del cambio","Comunicación, embajadores, formación certificada e incentivos (ADKAR)."],
- ["5","Métricas y KPI","Tablero de indicadores publicado cada trimestre."]
-].map(([k,b,p])=>`<div><span class="k">Elemento ${k}</span><b>${b}</b><p>${p}</p></div>`).join("")}</div>
-<div class="base"><span class="eyebrow" style="color:var(--hero-muted)">Elemento 6 · aporte de este Plan</span><b>Blindaje institucional</b><p>Mecanismos normativos, contractuales, organizativos y de rendición de cuentas que hacen costoso y difícil interrumpir el Plan.</p></div>`)}
-${block("Arquitectura por capas","4.2", `<div class="layers">${[
- ["Gobernanza","Comité de Gobierno y TD; Consejo Consultivo Interinstitucional; PMO Digital (UE 011)."],
- ["Normativa","Leyes 32374 y 32348, RFN 2696-2026, propuesta de “Ley del Expediente Fiscal Electrónico”."],
- ["Procesos","Procesos fiscales rediseñados en BPMN, empezando por flagrancia."],
- ["Datos","Modelo estructurado de la carpeta, diccionario común con el PJ, anonimización y datos abiertos."],
- ["Aplicaciones","CFE, visor integrado, casilla, mesa de partes, “Mi Carpeta”, observatorio."],
- ["Interoperabilidad","Servicios sobre PIDE con EJE, PNP, RENIEC, INPE y Medicina Legal."],
- ["Infraestructura y seguridad","Data center principal y de contingencia, nube híbrida soberana, ISO 27001, SOC 24/7."],
- ["Personas","Competencias digitales, nuevos roles (datos, procesos) y cultura de colaboración."]
-].map(([b,s])=>`<div class="layer"><b>${b}</b><span>${s}</span></div>`).join("")}</div>`)}
-${block("Beneficios esperados","4.3", `<div class="chips">${["Alineación con la misión (PEI)","Gobernanza, riesgo y cumplimiento","Decisiones basadas en datos","Transparencia y anticorrupción","Escalable de 1 a 34 distritos","Ahorro en papel, traslados y foliado","Sostenibilidad ambiental"].map(x=>`<span class="chip">${x}</span>`).join("")}</div>`)}`;
-
-V.blindaje = () => `
-${block("Cuatro desafíos y su respuesta","5.1", table(["Desafío","Cómo se manifiesta en el MP-FN","Respuesta del Plan"],[
- ["<b>1. Resistencia al cambio</b>","Hábito del papel; temor a la exposición que genera la trazabilidad.","Co-diseño, embajadores digitales, comunicar beneficios y obligatoriedad progresiva."],
- ["<b>2. Competencias digitales</b>","Brecha generacional y territorial; poca formación en firma digital.","Programa certificado de la Escuela del MP (básico, intermedio, avanzado) y soporte en sitio."],
- ["<b>3. Sistemas heredados</b>","SGF y aplicativos aislados; carpetas físicas en trámite.","Integración por APIs, migración por etapas y “solo lo nuevo en digital” desde la fecha de corte."],
- ["<b>4. Gestión de datos</b>","Datos no estructurados y duplicados; información sensible.","Gobierno de datos, diccionario común con el PJ, anonimización e ISO 27001."]
+${block("Síntomas de una Fiscalía fragmentada","", panels([
+ ["Carpetas en papel","Riesgo de pérdida, sustracción y alteración de folios; megacasos inmanejables.",`<span class="pill red">Crítico</span>`],
+ ["Datos en silos","Cada oficina fiscal guarda sus expedientes en su propia base. No existe una fuente única.",`<span class="pill red">Crítico</span>`],
+ ["Consulta nacional desactualizada","Casos cerrados en provincia siguen figurando como abiertos en la consulta general.",`<span class="pill red">Crítico</span>`],
+ ["Discontinuidad política","Cambios sucesivos de jefatura (2021–2026) truncaron el proyecto en su fase crítica.",`<span class="pill warn">Alto</span>`],
+ ["Asimetría con el Poder Judicial","El EJE ya opera en cientos de juzgados; la CFE recién inicia en Lima Sur.",`<span class="pill warn">Alto</span>`],
+ ["Brecha digital","Competencias limitadas y resistencia al cambio en fiscales y personal.",`<span class="pill warn">Alto</span>`]
 ]))}
-${block("El quinto desafío: la inestabilidad política","5.2", `<div class="callout"><b>El principal riesgo no es tecnológico, es político-institucional.</b> En 2021–2022 el proyecto se truncó por la crisis en la conducción del MP. A las causas de fracaso que señala Paul Wilkinson (falta de alineación, pocas competencias, negación del cambio cultural) se suma la discontinuidad de la alta dirección.</div>`)}
-${block("Diez mecanismos de blindaje","", `<div class="shield">${[
- ["Norma con rango de ley","“Ley del Expediente Fiscal Electrónico” (modelo RDL 6/2023). Ninguna jefatura la deroga por resolución."],
- ["Prioridad institucional permanente","Suspenderla exige informe técnico y acuerdo de la Junta de Fiscales Supremos."],
- ["Compromisos con el BID","Metas y cláusulas en el MOP: abandonar tiene costo financiero y reputacional."],
- ["PMO profesional y estable","Equipo por concurso con contratos ligados al proyecto, no a la gestión."],
- ["Consejo Consultivo Interinstitucional","Aliados externos (PJ, PNP, MINJUS, PCM, Defensoría, sociedad civil) que exigen continuidad."],
- ["Tablero público trimestral","Prensa, Congreso y ciudadanía ven el retraso: sube el costo político."],
- ["Victorias tempranas","Casilla, reparto aleatorio y “Mi Carpeta” crean usuarios que defienden el sistema."],
- ["Inserción en el planeamiento","PEI, POI, Programación Multianual y presupuesto por resultados."],
- ["Control concurrente","Contraloría y auditoría externa anual detectan paralizaciones injustificadas."],
- ["Arquitectura abierta","Código propiedad del Estado y estándares abiertos: nada depende de personas clave."]
-].map(([b,p],i)=>`<div><span class="i">${i+1}</span><b>${b}</b><p>${p}</p></div>`).join("")}</div>`)}`;
+<div class="callout"><b>Pregunta del caso:</b> ¿cómo puede el Ministerio Público garantizar que el estado de cada caso fiscal sea uno solo, correcto y consultable en todo el país?</div>`;
 
-const PH = [
- ["Fase 0","Fundamentos y blindaje","Nov. 26 – Mar. 27",0,5,"Plan aprobado, Comité y Consejo instalados, PMO completa, línea base, tablero público, proyecto de ley."],
- ["Fase 1","Consolidación del piloto","Abr. – Dic. 2027",5,14,"Lima Sur interoperando con EJE, dos pilotos más, Casilla Fiscal y reparto aleatorio."],
- ["Fase 2","Escalamiento","2028",14,26,"Flagrancia en todos los distritos; proceso común en Lima y Callao; “Mi Carpeta”; data center de contingencia."],
- ["Fase 3","Cobertura nacional","2029",26,38,"Proceso común en 34 distritos; integración con PNP, INPE y Medicina Legal; cero papel en carpetas nuevas."],
- ["Fase 4","Fiscalía orientada al dato","2030",38,50,"Observatorio con datos abiertos, IA para megacasos y evaluación de impacto independiente."]
-];
-const BUD = [["Plataforma CFE e interoperabilidad",35,"var(--data)","Desarrollo, licencias, integración con EJE, PNP y PIDE."],["Infraestructura y ciberseguridad",25,"#2f4b7c","Data centers, nube, SOC, SGSI."],["Equipamiento y firma digital",15,"#6b5ca5","Escáneres, equipos, certificados y tokens."],["Gestión del cambio y formación",12,"var(--warn)","Escuela del MP, embajadores, soporte en sitio."],["PMO, monitoreo y evaluación",8,"var(--accent)","Equipo, tablero, auditoría externa."],["Contingencias",5,"#7a8494","Riesgos y ajustes."]];
-
-V.estrategia = () => `
-${block("Hoja de ruta por fases","6.4", `<div class="tbl-wrap" style="padding:16px"><div class="gantt">
- <div class="g-axis">${[["2027",2],["2028",14],["2029",26],["2030",38]].map(([l,m])=>`<span style="left:${m/50*100}%">${l}</span>`).join("")}</div>
- ${PH.map(([f,n,p,a,b,d],i)=>`<div class="g-row"><div class="lbl">${f}<small>${n}</small></div><div class="g-track">${[2,14,26,38].map(m=>`<i class="g-grid" style="left:${m/50*100}%"></i>`).join("")}<div class="g-bar${i===0?" f0":""}" style="left:${a/50*100}%;width:${(b-a)/50*100}%">${p}</div></div><div class="g-desc">${d}</div></div>`).join("")}
-</div></div>`)}
-${block("Catorce pasos aplicados al MP-FN","6.1", `<div class="steps14">${[
- ["Comprender el estado actual","Auditoría de la UE 011, inventario de sistemas, línea base y lecciones de Lima Sur.","UE 011 / OGTI","Nov. 26 – Feb. 27"],
- ["Conseguir apoyo","Caso ante la Junta de Fiscales Supremos, PCM, MEF, BID y Congreso.","Fiscal de la Nación / GG","Dic. 2026"],
- ["Establecer el presupuesto","Reprogramar los S/ 125 M e incluir mantenimiento posterior al préstamo.","OGPLAP / UE 011","Ene. 2027"],
- ["Crear la cultura adecuada","Campaña “Fiscalía Digital Transparente” y comunidades de práctica.","Escuela del MP / Imagen","Permanente"],
- ["Definir visión y objetivos","Talleres con fiscales, PNP y PJ; validar OE1–OE7.","Comité de TD","Ene. 2027"],
- ["Formar el equipo","PMO Digital con arquitectos, analistas, cambio y seguridad; matriz RACI.","UE 011","Feb. 2027"],
- ["Priorizar proyectos","Impacto/velocidad: flagrancia, casilla y reparto, proceso común, observatorio e IA.","Comité de TD","Feb. 2027"],
- ["Seleccionar soluciones TI","Licitación BID: APIs, interoperabilidad con EJE, código del Estado.","UE 011 / BID","Mar. – Jun. 2027"],
- ["Emplear los datos","Modelo de datos estructurado, observatorio y analítica de carga y plazos.","OGTI / Observatorio","Desde 2027"],
- ["Ciberseguridad y cumplimiento","ISO 27001, SOC 24/7, cifrado, doble factor, Ley 29733.","Oficial de Seguridad Digital","Permanente"],
- ["Plan de implementación","Cronograma por fases, hitos, KPIs e hipercuidado de 90 días.","PMO Digital","Mar. 2027"],
- ["Proyectos piloto","Consolidar Lima Sur y abrir un piloto en Lima y otro en provincia.","UE 011 / Distritos","2027"],
- ["Feedback iterativo","Retrospectivas mensuales, encuestas y mesa con PJ y PNP.","PMO Digital","Mensual"],
- ["Seguir mejorando","Hoja de ruta anual de innovación y revisión anual del Plan.","Comité de TD","Anual"]
-].map(([b,p,r,t],i)=>`<div><div class="top"><span class="k">Paso ${pad(i+1)}</span><span class="pill">${t}</span></div><b>${b}</b><p>${p}</p><small>${r}</small></div>`).join("")}</div>`)}
-${block("Presupuesto referencial","6.5 · S/ 125 M", `<div class="panel"><div class="stack" role="img" aria-label="Distribución del presupuesto">${BUD.map(([n,p,c])=>`<div style="flex:${p};background:${c}" title="${n}: ${p} %">${p} %</div>`).join("")}</div>
-<div class="legend">${BUD.map(([n,p,c,d])=>`<div><i style="background:${c}"></i><b>${p} %</b><span><b style="color:var(--ink)">${n}</b> · S/ ${(125*p/100).toLocaleString("es-PE",{maximumFractionDigits:2})} M · ${d}</span></div>`).join("")}</div>
-<p class="note" style="margin-top:14px">Montos referenciales, a validar con el POA y el MOP vigentes. Debe preverse la operación y mantenimiento tras el cierre del préstamo.</p></div>`)}
-${block("Cuatro buenas prácticas","6.2", `<div class="cols">${[
- ["Buscar oportunidades","Mapear los “dolores” de cada fiscalía y llevarlos al backlog."],
- ["Iniciar el cambio organizacional","Formación y soporte; la directiva obligatoria se activa cuando el distrito está listo."],
- ["Focalizar en las personas","Diseñar con fiscales, víctimas y abogados. La tecnología es un medio."],
- ["Trabajar de forma ágil","Entregas cada 2–4 semanas, producto mínimo viable por proceso, sin “gran despliegue”."]
-].map(([b,p])=>`<div class="panel" style="display:grid;gap:4px"><b>${b}</b><span style="font-size:.9rem;color:var(--muted)">${p}</span></div>`).join("")}</div>`)}
-<details><summary>Estrategia digital en 10 pasos (6.3)</summary>${table(["Paso","Aplicación en el MP-FN"],[
- ["1. Objetivos SMART","“Al 31/12/2027, el 100 % de los casos de flagrancia de 3 distritos se tramitan en la CFE y se remiten al PJ en menos de 24 horas”."],
- ["2. Conocer a la audiencia","Fiscales, víctimas, imputados y defensa, PNP, jueces, ciudadanía y prensa."],
- ["3. Benchmarking","EJE del PJ, España, Chile (SAF) y Colombia; evitar la fragmentación española."],
- ["4. Propuesta de valor","“Tu caso, seguro y visible: ninguna carpeta se pierde, nadie la manipula sin dejar huella y tú puedes seguirla en línea”."],
- ["5. Plataformas","CFE, PIDE, firma digital RENIEC, ID Gob.pe, nube híbrida, analítica."],
- ["6. Contenidos","Guías, videotutoriales, preguntas frecuentes, boletín; lenguaje claro."],
- ["7. Visibilidad","Integración con gob.pe; “Mi Carpeta” y mesa de partes visibles en buscadores."],
- ["8. Redes sociales","Facebook, X, TikTok y YouTube para ciudadanía y gremios de abogados."],
- ["9. Medición","Observatorio Fiscal y tablero de KPIs."],
- ["10. Ajustes continuos","Revisión trimestral del Comité y anual con el Consejo Consultivo."]
-])}</details>`;
-
-V.kpis = () => `
-${block("Indicadores destacados","línea base → meta 2030", `<div class="kpi-feature">${[
- ["Ejecución presupuestal CFE","6,1 %","≥ 90 %",6.1,90,100,"Equivale al ROI"],
- ["Carpetas nuevas en la CFE","≈ 0 %","100 %",0,100,100,"Equivale a conversiones"],
- ["Distritos con CFE operativa","1","34",1,34,34,"Cobertura nacional"],
- ["Percepción de corrupción","35 %","≤ 25 %",35,25,50,"Equivale a sentimiento de marca; menos es mejor"]
-].map(([t,f,to,b,m,max,n])=>`<div class="kf"><span class="t">${t}</span><div class="vals tnum"><span class="from">${f}</span><span class="ar">→</span><span class="to">${to}</span></div><div class="kbar" role="img" aria-label="${t}: de ${f} a ${to}"><div class="m" style="width:${m/max*100}%"></div><div class="b" style="left:calc(${b/max*100}% - 2px)"></div></div><small><span style="color:var(--accent)">▮</span> línea base · <span style="color:var(--data)">▬</span> meta · ${n}</small></div>`).join("")}</div>`)}
-${block("Tablero completo","16 indicadores", table(["Dimensión","Indicador","Línea base","Meta 2030"],[
- ["Ejecución","% de ejecución presupuestal de la CFE","6,1 % (2025)","≥ 90 %"],
- ["Adopción","% de carpetas nuevas íntegramente en la CFE","≈ 0 % (piloto)","100 %"],
- ["Cobertura","Distritos fiscales con CFE operativa","1 (Lima Sur)","34"],
- ["Interoperabilidad","% de carpetas remitidas digitalmente al PJ","LB 2027","≥ 95 %"],
- ["Eficiencia","Tiempo de remisión de carpeta en flagrancia","LB 2027","&lt; 24 horas"],
- ["Eficiencia","Tiempo de la investigación preliminar","LB 2027","−30 %"],
- ["Integridad","Carpetas extraviadas o alteradas","LB 2027","0"],
- ["Seguridad","Incidentes críticos no contenidos","LB 2027","0"],
- ["Transparencia","% de casos con reparto aleatorio auditable","LB 2027","100 %"],
- ["Transparencia","Usuarios activos de “Mi Carpeta”","0","LB + metas anuales"],
- ["Confianza","Percepción del MP como institución corrupta","35 % (2025)","≤ 25 %"],
- ["CX","Satisfacción de usuarios externos (NPS)","LB 2027","≥ +30"],
- ["EX","Satisfacción de fiscales con la CFE (eNPS)","LB 2027","≥ +20"],
- ["Competencias","% de fiscales certificados","LB 2027","≥ 95 %"],
- ["Sostenibilidad","Reducción del consumo de papel","LB 2027","−70 %"],
- ["Continuidad","Reportes trimestrales publicados a tiempo","0","100 %"]
-].map(r=>[`<span class="pill teal">${r[0]}</span>`,r[1],`<span class="tnum">${r[2]}</span>`,`<b class="tnum">${r[3]}</b>`])))}
-<p class="note">“LB 2027”: línea base que se levanta en la Fase 0. Los KPI de marketing (tráfico, conversiones, ROI) se traducen a indicadores de valor público.</p>
-${block("Ritmo de seguimiento","7.1", `<div class="cadence">${[
- ["Mensual","Reporte de la PMO al Comité de TD."],
- ["Trimestral","Tablero en el Portal de Transparencia; informe al BID y al MEF."],
- ["Semestral","Consejo Consultivo y encuestas EX/CX."],
- ["Anual","Auditoría externa; informe a la Junta y al Congreso."],
- ["2030","Evaluación de impacto independiente."]
-].map(([b,s])=>`<div><b>${b}</b><span>${s}</span></div>`).join("")}</div>`)}`;
-
-V.gobernanza = () => `
-${block("Órganos de gobierno","8.1", `<div class="org">
- <div class="box top"><b>Comité de Gobierno y TD del MP</b><span>Fiscal de la Nación (o supremo delegado), Gerente General, jefe UE 011, Oficial de Gobierno Digital, Oficial de Seguridad Digital, dos fiscales superiores.</span><em>Aprueba prioridades, presupuesto y cambios; supervisa el avance.</em></div>
- <div class="vline"></div>
- <div class="row">
-  <div class="box"><b>Consejo Consultivo Interinstitucional</b><span>MP, PJ, PNP, MINJUS, PCM-SGTD, Defensoría, Colegio de Abogados, academia, sociedad civil.</span><em>Coordina interoperabilidad y opina sobre la continuidad.</em></div>
-  <div class="box"><b>PMO Digital (UE 011)</b><span>Gerente de programa y equipo técnico por concurso.</span><em>Ejecuta, monitorea, reporta y gestiona riesgos.</em></div>
-  <div class="box"><b>Red de Embajadores Digitales</b><span>Un fiscal y un servidor por distrito fiscal.</span><em>Acompaña la adopción y canaliza feedback.</em></div>
+V.ciudadano = () => `
+${block("Recorrido de una persona","ejemplo ilustrativo", `<div class="journey">
+ <div><span class="k">2023 · Cusco</span><b>Denuncia en su contra</b><p>La fiscalía provincial abre una carpeta.</p></div>
+ <div><span class="k">2023 · Cusco</span><b>Caso archivado</b><p>Se registra el archivo en la base de datos local de la oficina.</p></div>
+ <div class="hurt"><span class="k">2026 · Lima</span><b>Consulta: “en investigación”</b><p>La consulta nacional nunca recibió la actualización.</p></div>
+ <div class="hurt"><span class="k">2026</span><b>Se cierran puertas</b><p>Pierde un empleo, una licitación o un trámite migratorio.</p></div>
+ <div><span class="k">2026 · Cusco</span><b>Peregrinaje</b><p>Debe viajar o tramitar una constancia física para probar que su caso está cerrado.</p></div>
+</div>`)}
+${block("Simulador de consulta","demostración", `<div class="sim panel">
+ <div class="seg" role="group" aria-label="Arquitectura">
+  <button type="button" id="sim-hoy" aria-pressed="true">Arquitectura actual</button>
+  <button type="button" id="sim-prop" aria-pressed="false">Base centralizada</button>
  </div>
+ <div class="result" id="sim-out"></div>
+ <p class="note">Datos ficticios con fines de demostración.</p>
 </div>`)}
-${block("Mapa de calor de riesgos","8.2", `<div class="tbl-wrap" style="padding:14px;border:0;background:none"><div class="heat">
- <div></div><div class="h">Impacto medio</div><div class="h">Impacto alto</div><div class="h">Impacto muy alto</div>
- <div class="h">Prob. alta</div>
- <div class="cell c2"><span>Brecha de conectividad en provincias</span></div>
- <div class="cell c3"><span>Cambio de Fiscal de la Nación que paraliza el Plan</span><span>Baja ejecución presupuestal</span></div>
- <div class="cell c3"></div>
- <div class="h">Prob. media</div>
- <div class="cell c1"><span>Dependencia de un proveedor</span></div>
- <div class="cell c2"><span>Resistencia de fiscales</span><span>Falla de interoperabilidad con EJE</span></div>
- <div class="cell c3"><span>Ciberataque o fuga de información</span></div>
-</div></div>`)}
-${table(["Riesgo","Mitigación"],[
- ["<b>Cambio de Fiscal de la Nación</b>","Los 10 mecanismos de blindaje del Título V."],
- ["<b>Baja ejecución presupuestal</b>","PMO profesional, adquisiciones BID planificadas, tablero público."],
- ["<b>Resistencia de fiscales</b>","Co-diseño, formación, embajadores, obligatoriedad progresiva."],
- ["<b>Falla de interoperabilidad con EJE</b>","Estándar común y mesa técnica MP–PJ permanente."],
- ["<b>Ciberataque o fuga</b>","ISO 27001, SOC, cifrado, contingencia y auditorías."],
- ["<b>Dependencia de proveedor</b>","Código del Estado, estándares abiertos, transferencia."],
- ["<b>Conectividad en provincias</b>","Modo fuera de línea con sincronización; convenios con MTC."]
-])}`;
+<div class="callout"><b>Para la ciudadanía, un antecedente abierto equivale a una sospecha permanente.</b> El error no es jurídico, es de datos: la decisión del fiscal existe, pero no llega a quien consulta.</div>`;
 
-V.disposiciones = () => `
-${block("Disposiciones complementarias finales","", `<div class="articles">
- <div class="art"><span class="pill red">30 días hábiles</span><h4>Primera · Directiva de uso obligatorio</h4><p>La Gerencia General propone la directiva de uso obligatorio de la CFE por etapas.</p></div>
- <div class="art key"><span class="pill red">60 días hábiles</span><h4>Segunda · Anteproyecto de ley</h4><p>Asesoría Jurídica elabora la “Ley del Expediente Fiscal Electrónico” para el Congreso.</p></div>
- <div class="art"><span class="pill teal">Plan anual</span><h4>Tercera · Competencias digitales</h4><p>La Escuela del MP incorpora el programa de formación del Plan.</p></div>
- <div class="art"><span class="pill">Cada año</span><h4>Cuarta · Revisión del Plan</h4><p>Revisión anual; cambios aprobados según el artículo 2 de la resolución.</p></div>
+const SIM = {
+ hoy:{state:"En investigación",cls:"bad",upd:"12/05/2023 (alta del caso)",src:"Copia sincronizada, incompleta",note:"La disposición de archivo existe en Cusco pero no se refleja aquí."},
+ prop:{state:"Archivado",cls:"good",upd:"14/09/2023 (disposición de archivo)",src:"Base central · fuente única",note:"El fiscal firmó el archivo en Cusco y quedó visible en todo el país al instante."}
+};
+function simRender(k){
+ const d = SIM[k];
+ document.getElementById("sim-hoy").setAttribute("aria-pressed",k==="hoy");
+ document.getElementById("sim-prop").setAttribute("aria-pressed",k==="prop");
+ document.getElementById("sim-out").innerHTML = `
+  <div class="rcard"><span class="eyebrow">Consulta de caso fiscal</span>
+   <div class="row"><span>Caso</span><span class="mono">1006014501-2023-218-0</span></div>
+   <div class="row"><span>Distrito fiscal</span><span>Cusco</span></div>
+   <div class="row"><span>Última actualización</span><span class="tnum">${d.upd}</span></div>
+   <div class="row"><span>Origen del dato</span><span>${d.src}</span></div>
+   <span class="state ${d.cls}">${d.state}</span></div>
+  <div class="rcard"><span class="eyebrow">Qué está pasando</span><p>${d.note}</p>
+   <span class="pill ${d.cls==="bad"?"red":"ok"}">${d.cls==="bad"?"La persona figura con un caso abierto":"La persona no arrastra un antecedente falso"}</span></div>`;
+}
+
+V.causa = () => `
+${block("Arquitectura actual: datos distribuidos sin consolidación","según experiencia del autor, 2021–2022", `<div class="tbl-wrap" style="padding:12px">${archHoy()}</div>`)}
+${block("Por qué falla","", panels([
+ ["Cada oficina es una isla","Un miniservidor local guarda los expedientes de esa sede, con sus propias versiones y respaldos."],
+ ["Sincronización irregular","Depende de la conectividad, del personal y de procesos manuales; muchas actualizaciones nunca llegan a Lima."],
+ ["Sin fuente única de verdad","Ante dos versiones del mismo caso, nadie sabe cuál es la vigente."],
+ ["Mantenimiento disperso","Cientos de equipos que actualizar, respaldar y proteger; riesgo de pérdida por fallas locales."],
+ ["Seguridad desigual","Accesos y respaldos distintos en cada sede; difícil auditar quién vio o cambió qué."],
+ ["Sin datos para decidir","No hay una vista nacional confiable de carga, plazos ni resultados."]
+]))}
+<div class="callout teal"><b>Diagnóstico:</b> el problema no es la falta de datos, sino que los datos están en el lugar equivocado y en muchas versiones.</div>`;
+
+V.ejes = () => `
+${block("Seis ejes de desarrollo","", `<div class="shield">${[
+ ["Tecnológico","Servidor central, gestor de base de datos, Sistema CFE, red nacional y data center de contingencia."],
+ ["Datos","Modelo de datos único del caso fiscal, limpieza, deduplicación y conciliación de estados."],
+ ["Procesos","Registrar una sola vez, en la base central, cada disposición: apertura, archivo, acusación."],
+ ["Normativo","Leyes 32374 y 32348, RFN 2696-2026; directiva que declare la base central como registro oficial."],
+ ["Personas","Formación de fiscales y asistentes, embajadores digitales y mesa de ayuda."],
+ ["Continuidad","Blindaje frente a cambios de jefatura: prioridad institucional, BID, tablero público."]
+].map(([b,p],i)=>`<div><span class="i">${i+1}</span><b>${b}</b><p>${p}</p></div>`).join("")}</div>`)}
+${block("Del documento al dato","tres niveles", `<div class="stairs">
+ <div class="step"><span class="k">Nivel 1</span><h4>Digitación</h4><p>Escanear carpetas.</p><p class="now"><b>Hoy:</b> PDFs sin estructura en bases locales.</p></div>
+ <div class="step"><span class="k">Nivel 2</span><h4>Digitalización</h4><p>Flujos automatizados sobre una base única.</p><p class="now">Meta: base central y CFE en todos los distritos.</p></div>
+ <div class="step"><span class="k">Nivel 3 · objetivo</span><h4>Transformación</h4><p>Decidir con datos y servir al ciudadano.</p><p class="now">Meta: consulta confiable, “Mi Carpeta”, observatorio.</p></div>
+</div>`)}`;
+
+V.solucion = () => `
+${block("Arquitectura propuesta: base de datos centralizada","", `<div class="tbl-wrap" style="padding:12px">${archProp()}</div>`)}
+${block("Componentes a adquirir","", table(["Componente","Función","Nota"],[
+ ["<b>Servidor central</b> (clúster)","Aloja la base nacional de casos fiscales.","Alta disponibilidad; dimensionado para 34 distritos."],
+ ["<b>Software de base de datos</b>","Gestor relacional con réplica, cifrado y auditoría.","Licenciado o de código abierto con soporte."],
+ ["<b>Sistema CFE</b>","Aplicación web que usan las oficinas fiscales.","Ya aprobado por RFN 2696-2026; se apoya en la base central."],
+ ["<b>Data center de contingencia</b>","Réplica en otra sede para continuar si falla Lima.","Previsto en el proyecto CFE."],
+ ["<b>Red nacional</b>","Enlace seguro de cada sede con Lima.","Con modo fuera de línea y cola de sincronización en zonas de baja conectividad."],
+ ["<b>Seguridad</b>","Doble factor, cifrado, registro inmutable de accesos, SOC.","Alineado a ISO 27001 y Ley 29733."]
+]))}
+${block("Distribuida vs. centralizada","", `<div class="vs">
+ <div class="panel" style="display:grid;gap:8px"><span class="tag red">Hoy · distribuida</span>${list(["Una base por oficina","Versiones distintas del mismo caso","Consulta nacional incompleta","Respaldo y seguridad desiguales","Auditoría casi imposible"])}</div>
+ <div class="panel" style="display:grid;gap:8px;border-color:var(--data)"><span class="tag teal">Propuesta · centralizada</span>${list(["Una base nacional, una verdad","Cada disposición se ve al instante en todo el país","Consulta y “Mi Carpeta” confiables","Seguridad y respaldo uniformes","Trazabilidad de cada acceso"])}</div>
 </div>`)}
-${block("Disposición transitoria","Única", `<div class="callout teal"><b>“Solo lo nuevo en digital”.</b> Las carpetas en papel en trámite a la fecha de corte de cada distrito siguen en papel hasta concluir, salvo que el fiscal disponga digitalizarlas con firma y metadatos.</div>`)}`;
+${block("Migración por etapas","", `<div class="steps14">${[
+ ["Inventario","Censar los miniservidores, sus bases y su calidad de datos.","Fase 0"],
+ ["Modelo único","Definir el diccionario de datos del caso fiscal, común con el PJ.","Fase 0"],
+ ["Limpieza y conciliación","Deduplicar y resolver estados contradictorios (abierto vs. archivado).","Fase 1"],
+ ["Migración piloto","Lima Sur y dos distritos más; validar con fiscales.","2027"],
+ ["Escalamiento","Migrar distrito por distrito con fecha de corte.","2028–2029"],
+ ["Apagado de bases locales","Retirar miniservidores tras verificar la migración.","2029–2030"]
+].map(([b,p,t],i)=>`<div><div class="top"><span class="k">Paso ${pad(i+1)}</span><span class="pill">${t}</span></div><b>${b}</b><p>${p}</p></div>`).join("")}</div>`)}`;
 
-V.anexos = () => `
-${block("Anexo 1 · Cronología de la Fiscalía Digital de España","", `<div class="timeline">${[
- ["2011","Ley 18/2011","Regula el uso de las TIC en la Administración de Justicia."],
- ["2016","Piloto Valladolid","Fortuny, Portafirmas, gestor documental, visor Horus. LexNET: 68 millones de comunicaciones."],
- ["2021–2022","Fondos europeos (MRR)","Acuerdo Marco de Justicia para la TD (más de 125 M€)."],
- ["2023","Sede electrónica y DATALAB","Acceso con Cl@ve; 18 M€ + 3,5 M€; RDL 6/2023: expediente como datos estructurados."],
- ["2025","LO 1/2025 y Atenea-Fiscalía","Ley de eficiencia del Servicio Público de Justicia."]
-].map(([d,b,s])=>`<div class="tl"><span class="d">${d}</span><b>${b}</b><span>${s}</span></div>`).join("")}</div>`)}
-${block("Anexo 2 · Matriz RACI","", `<div class="tbl-wrap"><table class="raci"><thead><tr><th>Actividad</th><th>Fiscal de la Nación</th><th>Comité TD</th><th>UE 011 / PMO</th><th>OGTI</th><th>Escuela MP</th><th>PJ</th></tr></thead><tbody>${[
- ["Aprobación del Plan","A","R","C","C","I","I"],
- ["Selección de soluciones TI","I","A","R","C","I","C"],
- ["Interoperabilidad con EJE","I","A","R","R","I","C"],
- ["Formación y gestión del cambio","I","A","C","I","R","I"],
- ["Ciberseguridad","I","A","C","R","I","I"],
- ["Tablero público de avance","A","C","R","C","I","I"]
-].map(([a,...r])=>`<tr><td><b>${a}</b></td>${r.map(x=>`<td class="c r-${x}">${x}</td>`).join("")}</tr>`).join("")}</tbody></table></div>
-<p class="note">R = Responsable · A = Aprueba · C = Consultado · I = Informado</p>`)}
-${block("Anexo 3 · Fuentes principales","", list([
- "Cavero Jara, J. (2026). <i>Transformación digital: definición, dominios, marcos y pasos para delinear un plan.</i> Doctorado UNI.",
- "Ministerio Público. RFN N° 2696-2026-MP-FN (02/09/2026).",
- "Ley N° 32374 y Ley N° 32348 (2025).",
- "RPP (03/09/2025). La PCM señala que la CFE tiene S/ 125 M y 6,1 % de ejecución.",
- "Programa BID 4959/OC-PE: POA 2023 y POA 2024.",
- "Ipsos-Proética (2025). XIII Encuesta Nacional sobre Percepciones de la Corrupción.",
- "Forbes Perú (23/03/2026). Elección del Fiscal de la Nación 2026–2029.",
- "Fiscalía General del Estado (España). Memorias 2021, 2023 y 2024.",
- "Ministerio de Justicia de España. Boletín Justicia Digital n.º 14 (2016); LO 1/2025; RDL 6/2023."
-]))}`;
+V.resultados = () => `
+${block("Indicadores clave","línea base → meta", `<div class="kpi-feature">${[
+ ["Casos con estado consistente entre sede y consulta nacional","LB 2027","100 %",0,100,100,"Línea base por medir en la Fase 0"],
+ ["Distritos migrados a la base central","0","34",0,34,34,"Cobertura nacional"],
+ ["Ejecución presupuestal CFE","6,1 %","≥ 90 %",6.1,90,100,"Dato 2025"],
+ ["Percepción de corrupción del MP","35 %","≤ 25 %",35,25,50,"Menos es mejor"]
+].map(([t,f,to,b,m,max,n])=>`<div class="kf"><span class="t">${t}</span><div class="vals tnum"><span class="from">${f}</span><span class="ar">→</span><span class="to">${to}</span></div><div class="kbar" role="img" aria-label="${t}: de ${f} a ${to}"><div class="m" style="width:${m/max*100}%"></div><div class="b" style="left:calc(${b/max*100}% - 2px)"></div></div><small><span style="color:var(--accent)">▮</span> línea base · <span style="color:var(--data)">▬</span> meta · ${n}</small></div>`).join("")}</div>`)}
+${block("Otros resultados medibles","", table(["Resultado","Indicador","Meta"],[
+ ["Consulta confiable","Reclamos por antecedentes desactualizados","−90 %"],
+ ["Menos trámites","Constancias físicas de archivo solicitadas","−80 %"],
+ ["Integridad","Carpetas extraviadas o alteradas","0"],
+ ["Interoperabilidad","Carpetas remitidas digitalmente al PJ","≥ 95 %"],
+ ["Eficiencia","Remisión de carpeta en flagrancia","&lt; 24 horas"],
+ ["Seguridad","Incidentes críticos no contenidos","0"]
+]))}
+<p class="note">Metas propuestas para discusión; las líneas base se levantan en la Fase 0.</p>`;
 
-/* ---------- vistas ---------- */
+V.fiscalia = () => `
+${block("Cómo cambia la Fiscalía","", panels([
+ ["Gestión con una vista nacional","Carga, plazos y resultados reales por distrito para asignar fiscales y recursos.",`<span class="pill teal">Gestión</span>`],
+ ["Control y anticorrupción","Registro inmutable de accesos y reparto aleatorio: nadie manipula una carpeta sin dejar huella.",`<span class="pill teal">Control</span>`],
+ ["Menos carga administrativa","Fin de la conciliación manual entre sedes, del foliado y de las constancias físicas.",`<span class="pill teal">Productividad</span>`],
+ ["Menor costo de mantenimiento","Un centro de datos administrado en lugar de cientos de miniservidores dispersos.",`<span class="pill teal">Eficiencia</span>`],
+ ["Interoperabilidad real","Una sola base que conversa con el EJE del PJ, la PNP y RENIEC vía PIDE.",`<span class="pill teal">Integración</span>`],
+ ["Confianza institucional","Datos correctos y públicos reducen la percepción de opacidad.",`<span class="pill teal">Reputación</span>`]
+]))}
+<div class="callout"><b>Costo a asumir:</b> la adquisición de servidor y software, la migración y la formación. Se financia con los S/ 125 M ya asignados a la CFE (préstamo BID 4959), hoy con 6,1 % de ejecución.</div>`;
+
+V.ciudadania = () => `
+${block("Cómo cambia la vida de las personas","", panels([
+ ["Antecedentes correctos","Un caso archivado en cualquier provincia deja de figurar como abierto en todo el país.",`<span class="pill ok">Derechos</span>`],
+ ["Puertas que se abren","Empleo, contratación con el Estado, trámites migratorios y créditos sin un estigma falso.",`<span class="pill ok">Oportunidades</span>`],
+ ["Sin peregrinaje","No hace falta viajar a la sede de origen para pedir una constancia.",`<span class="pill ok">Tiempo y dinero</span>`],
+ ["“Mi Carpeta”","Víctimas, imputados y abogados ven el estado del caso en línea.",`<span class="pill ok">Acceso</span>`],
+ ["Trazabilidad visible","La parte puede saber quién accedió a su carpeta y cuándo.",`<span class="pill ok">Transparencia</span>`],
+ ["Inclusión","Atención presencial asistida y en lenguas originarias para quien no tiene acceso digital.",`<span class="pill ok">Equidad</span>`]
+]))}
+<p class="quote">“Tu caso, seguro y visible: ninguna carpeta se pierde, nadie la manipula sin dejar huella y tú puedes seguirla en línea.”</p>`;
+
+V.riesgos = () => `
+${block("Riesgos de la centralización y su mitigación","", table(["Riesgo","Mitigación"],[
+ ["<b>Punto único de falla</b> en Lima","Data center de contingencia con réplica en tiempo real y pruebas de recuperación."],
+ ["<b>Conectividad débil</b> en provincias","Modo fuera de línea con cola de sincronización; convenios con MTC."],
+ ["<b>Ciberataque o fuga</b> de datos sensibles","ISO 27001, SOC 24/7, cifrado, doble factor, registro inmutable."],
+ ["<b>Errores en la migración</b>","Conciliación de estados, validación con fiscales y fecha de corte por distrito."],
+ ["<b>Resistencia de fiscales</b>","Co-diseño, formación certificada y embajadores digitales."],
+ ["<b>Dependencia de un proveedor</b>","Código propiedad del Estado y estándares abiertos."],
+ ["<b>Cambio de Fiscal de la Nación</b>","Mecanismos de blindaje (abajo)."]
+]))}
+${block("Blindaje frente a la inestabilidad","", `<div class="chips">${["Prioridad institucional permanente","Ley del Expediente Fiscal Electrónico","Compromisos con el BID","PMO estable por concurso","Consejo Interinstitucional MP–PJ–PNP","Tablero público trimestral","Victorias tempranas","Control concurrente de Contraloría"].map(x=>`<span class="chip">${x}</span>`).join("")}</div>`)}
+${block("Referente: la Fiscalía Digital de España","", `<div class="callout teal"><b>Lección:</b> España llegó a tener trece sistemas distintos y eso complicó su interoperabilidad. Por eso el caso peruano propone una base única nacional y no una por distrito.</div>`)}`;
+
+V.conclusiones = () => `
+<div class="articles">
+ <div class="art key"><span class="pill red">1</span><h4>El problema es de datos, no de papel</h4><p>Digitalizar sin una base única reproduce los silos. Una carpeta archivada que no se ve como archivada sigue dañando a la persona.</p></div>
+ <div class="art key"><span class="pill red">2</span><h4>Centralizar crea una fuente única de verdad</h4><p>Servidor y software centrales en Lima, con contingencia e interoperabilidad, resuelven la inconsistencia de raíz.</p></div>
+ <div class="art key"><span class="pill red">3</span><h4>Sin blindaje no hay continuidad</h4><p>El mayor riesgo es político-institucional. La solución debe sobrevivir a los cambios de jefatura.</p></div>
+</div>
+<p class="quote">Un Ministerio Público con una sola verdad sobre cada caso protege a la Fiscalía y, sobre todo, a la ciudadanía.</p>
+<div class="callout teal"><b>Para el debate:</b> ¿centralización total o un modelo híbrido con base central y caché local en sedes de baja conectividad?</div>`;
+
 const home = () => `<div class="view">
 <section class="hero"><div class="wrap">
- <span class="eyebrow">Ministerio Público – Fiscalía de la Nación · República del Perú</span>
- <h1>Fiscalía Digital <em>Transparente</em> 2027–2030</h1>
- <p class="lead">Plan de Transformación Digital para implementar la Carpeta Fiscal Electrónica en los 34 distritos fiscales, con seguridad, trazabilidad y transparencia en cada actuación del proceso penal.</p>
+ <span class="eyebrow">Caso de estudio · Ministerio Público – Fiscalía de la Nación · Perú</span>
+ <h1>Carpetas que no se <em>cierran</em></h1>
+ <p class="lead">Un caso archivado en provincia puede seguir apareciendo como abierto en la consulta nacional. Analizamos el problema, su causa técnica, una solución con base de datos centralizada y su impacto en la Fiscalía y en la ciudadanía.</p>
  <div class="stats tnum">
-  <div class="stat"><span class="n">S/ 125 M</span><span class="l">asignados a la Carpeta Fiscal Electrónica</span></div>
-  <div class="stat"><span class="n red">6,1 %</span><span class="l">de ejecución a setiembre de 2025</span></div>
-  <div class="stat"><span class="n">1 → 34</span><span class="l">distritos fiscales con CFE al 2030</span></div>
-  <div class="stat"><span class="n">10</span><span class="l">mecanismos de blindaje frente a la inestabilidad</span></div>
+  <div class="stat"><span class="n">34</span><span class="l">distritos fiscales con datos dispersos</span></div>
+  <div class="stat"><span class="n red">6,1 %</span><span class="l">de ejecución de la Carpeta Fiscal Electrónica (2025)</span></div>
+  <div class="stat"><span class="n">S/ 125 M</span><span class="l">ya asignados para la solución</span></div>
+  <div class="stat"><span class="n red">35 %</span><span class="l">percibe al MP como institución corrupta</span></div>
  </div>
 </div></section>
 <div class="wrap home-body">
- <div class="home-head"><div><span class="eyebrow">Estructura del plan</span><h2>Once puntos, en el orden del documento</h2></div><p>Selecciona un punto para ver su detalle. Durante la exposición, avanza con las flechas del teclado.</p></div>
+ <div class="home-head"><div><span class="eyebrow">Hilo de la exposición</span><h2>Del problema al impacto, en diez partes</h2></div><p>Selecciona una parte para ver su detalle. Durante la exposición, avanza con las flechas del teclado.</p></div>
  <div class="grid">${S.map((s,i)=>`<button class="card" type="button" data-go="${s.id}"><span class="num">${pad(i+1)} · ${s.ref}</span><h3>${s.t}</h3><p>${s.s}</p><span class="go">Ver detalle →</span></button>`).join("")}</div>
- <div class="block" style="margin-top:12px"><span class="eyebrow">Hacia dónde vamos</span><div class="levels-strip">
-  <div class="lv"><b>1 · Digitación</b><span>Escanear carpetas. Donde está hoy gran parte del MP.</span></div>
-  <div class="lv"><b>2 · Digitalización</b><span>CFE con firma e interoperabilidad con el EJE (2027–2029).</span></div>
-  <div class="lv on"><b>3 · Transformación digital</b><span>Fiscalía orientada al dato y al ciudadano (2030).</span></div>
+ <div class="block" style="margin-top:12px"><span class="eyebrow">La idea en una línea</span><div class="levels-strip">
+  <div class="lv"><b>Problema</b><span>Cada oficina fiscal guarda sus casos en su propio miniservidor.</span></div>
+  <div class="lv"><b>Consecuencia</b><span>Casos cerrados figuran abiertos y la gente pierde oportunidades.</span></div>
+  <div class="lv on"><b>Solución</b><span>Una base de datos central en Lima como fuente única de verdad.</span></div>
  </div></div>
 </div></div>`;
 
@@ -737,16 +626,13 @@ function show(id, push=true){
  cur = i;
  app.innerHTML = i<0 ? home() : section(i);
  dots.querySelectorAll("button").forEach((b,k)=>b.setAttribute("aria-current", k===i));
- document.title = "Fiscalía Digital Transparente";
- if (id==="niveles") initTabs();
+ if (id==="ciudadano"){
+  document.getElementById("sim-hoy").addEventListener("click",()=>simRender("hoy"));
+  document.getElementById("sim-prop").addEventListener("click",()=>simRender("prop"));
+  simRender("hoy");
+ }
  window.scrollTo({top:0});
  if (push) try{ history.replaceState(null,"", i<0 ? location.pathname : "#"+id); }catch(e){}
-}
-function initTabs(){
- const tabs = document.querySelectorAll("#dom-tabs button"), panel = document.getElementById("dom-panel");
- const set = k => { tabs.forEach((t,j)=>t.setAttribute("aria-selected", j===k)); panel.innerHTML = DOM[k](); };
- tabs.forEach(t=>t.addEventListener("click",()=>set(+t.dataset.i)));
- set(0);
 }
 document.addEventListener("click", e=>{
  const g = e.target.closest("[data-go]");
