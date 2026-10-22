@@ -1,0 +1,769 @@
+<title>Fiscalía Digital Transparente</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Spectral:wght@500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: expediente institucional. Portada con índice de 11 puntos; cada punto es una "vista" con navegación anterior/siguiente para exponer. */
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --surface-2:#eceff4; --ink:#14213a; --muted:#5a6578; --line:#d7dce5;
+  --accent:#a3222d; --accent-soft:#f6e3e4; --data:#0d6e6b; --data-soft:#dcefee; --warn:#b56a00; --warn-soft:#fbeed8;
+  --ok:#2c7a3f; --ok-soft:#e0f0e3; --hero:#14213a; --hero-fg:#f3f5f9; --hero-muted:#b6bfd0;
+  --f-display:"Spectral",Georgia,"Times New Roman",serif;
+  --f-body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1524; --surface:#161f31; --surface-2:#1e2940; --ink:#e7ebf3; --muted:#9aa5ba; --line:#2a3650;
+  --accent:#ef6b74; --accent-soft:#3a1d24; --data:#4cc2bc; --data-soft:#123433; --warn:#f0a845; --warn-soft:#3a2b14;
+  --ok:#6cc483; --ok-soft:#173222; --hero:#0a1020; --hero-fg:#eef1f7; --hero-muted:#9aa5ba; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1524; --surface:#161f31; --surface-2:#1e2940; --ink:#e7ebf3; --muted:#9aa5ba; --line:#2a3650;
+  --accent:#ef6b74; --accent-soft:#3a1d24; --data:#4cc2bc; --data-soft:#123433; --warn:#f0a845; --warn-soft:#3a2b14;
+  --ok:#6cc483; --ok-soft:#173222; --hero:#0a1020; --hero-fg:#eef1f7; --hero-muted:#9aa5ba; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16.5px;line-height:1.55}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--hero)}
+a{color:inherit}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;line-height:1.15;margin:0}
+p{margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.mono{font-family:var(--f-mono);font-size:.82em;letter-spacing:.01em}
+.eyebrow{font-size:.74rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.tnum{font-variant-numeric:tabular-nums}
+
+/* barra superior */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--hero);color:var(--hero-fg);border-bottom:3px solid var(--accent)}
+.topbar .wrap{display:flex;align-items:center;gap:14px;padding-block:10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;background:none;border:0;color:inherit;font:inherit;cursor:pointer;padding:0}
+.seal{width:30px;height:30px;border-radius:50%;border:2px solid var(--hero-fg);display:grid;place-items:center;font-family:var(--f-display);font-weight:700;font-size:13px}
+.brand b{font-family:var(--f-display);font-size:1.05rem;font-weight:600}
+.brand small{display:block;color:var(--hero-muted);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase}
+.dots{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+.dots button{width:26px;height:26px;border-radius:6px;border:1px solid #ffffff33;background:transparent;color:var(--hero-muted);font:600 .72rem var(--f-body);cursor:pointer}
+.dots button[aria-current="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.dots button:hover{border-color:var(--hero-fg);color:var(--hero-fg)}
+.tool{background:transparent;border:1px solid #ffffff44;color:var(--hero-fg);border-radius:6px;padding:4px 10px;font:500 .8rem var(--f-body);cursor:pointer}
+button:focus-visible,.card:focus-visible{outline:3px solid var(--data);outline-offset:2px}
+
+/* portada */
+.hero{background:var(--hero);color:var(--hero-fg)}
+.hero .wrap{padding-block:44px 40px;display:grid;gap:22px}
+.hero .eyebrow{color:var(--hero-muted)}
+.hero h1{font-size:clamp(2rem,5vw,3.4rem);font-weight:700;max-width:18ch}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero .lead{color:var(--hero-muted);max-width:68ch;font-size:1.05rem}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:#ffffff22;border:1px solid #ffffff22;border-radius:var(--r);overflow:hidden}
+.stat{background:var(--hero);padding:16px 18px;display:grid;gap:4px}
+.stat .n{font-family:var(--f-display);font-size:2rem;font-weight:700;line-height:1}
+.stat .n.red{color:var(--accent)}
+.stat .l{font-size:.82rem;color:var(--hero-muted)}
+.home-body{padding-block:36px 56px;display:grid;gap:22px}
+.home-head{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap}
+.home-head h2{font-size:1.7rem}
+.home-head p{color:var(--muted);max-width:60ch}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;grid-template-rows:auto auto 1fr auto;gap:8px;text-align:left;font:inherit;color:inherit;cursor:pointer;transition:transform .15s,border-color .15s,box-shadow .15s}
+.card:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 8px 24px -14px #14213a66}
+.card .num{font-family:var(--f-mono);font-size:.78rem;color:var(--accent);font-weight:500}
+.card h3{font-size:1.2rem}
+.card p{color:var(--muted);font-size:.92rem}
+.card .go{font-size:.8rem;font-weight:600;color:var(--data)}
+.levels-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.lv{border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;background:var(--surface)}
+.lv.on{border-color:var(--data);background:var(--data-soft)}
+.lv b{font-family:var(--f-display);font-size:1.05rem;display:block}
+.lv span{font-size:.85rem;color:var(--muted)}
+
+/* vista de punto */
+.sec-head{background:var(--surface);border-bottom:1px solid var(--line)}
+.sec-head .wrap{padding-block:28px 24px;display:grid;gap:10px}
+.crumb{display:flex;gap:8px;align-items:center;font-size:.85rem;color:var(--muted);flex-wrap:wrap}
+.crumb button{background:none;border:0;padding:0;color:var(--data);font:600 .85rem var(--f-body);cursor:pointer}
+.sec-head h2{font-size:clamp(1.7rem,4vw,2.6rem)}
+.sec-head .lead{color:var(--muted);max-width:75ch;font-size:1.05rem}
+.big-n{font-family:var(--f-display);color:var(--accent);font-weight:700}
+.sec-body{padding-block:28px 40px;display:grid;gap:30px}
+.block{display:grid;gap:14px}
+.block>h3{font-size:1.35rem;display:flex;gap:10px;align-items:baseline}
+.block>h3 .mono{color:var(--muted);font-weight:500}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.cols>*{min-width:0}
+.pill{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--surface-2);color:var(--muted);white-space:nowrap}
+.pill.red{background:var(--accent-soft);color:var(--accent)}
+.pill.teal{background:var(--data-soft);color:var(--data)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+ul.clean{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+ul.clean li{padding-left:18px;position:relative}
+ul.clean li::before{content:"";position:absolute;left:2px;top:.62em;width:7px;height:7px;border-radius:2px;background:var(--accent)}
+.quote{font-family:var(--f-display);font-size:clamp(1.25rem,2.6vw,1.65rem);line-height:1.35;border-left:4px solid var(--accent);padding:4px 0 4px 18px;max-width:60ch}
+.callout{border-radius:var(--r);padding:16px 18px;background:var(--accent-soft);border:1px solid var(--accent)}
+.callout.teal{background:var(--data-soft);border-color:var(--data)}
+.callout b{color:var(--accent)}
+.callout.teal b{color:var(--data)}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);font-weight:600}
+tr:last-child td{border-bottom:0}
+td b{font-weight:600}
+.pager{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding-block:8px 48px}
+.pager button{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;text-align:left;font:inherit;color:inherit;cursor:pointer;display:grid;gap:2px}
+.pager button:hover{border-color:var(--accent)}
+.pager .nx{text-align:right}
+.pager small{color:var(--muted);font-size:.78rem}
+.pager b{font-family:var(--f-display);font-size:1.05rem}
+.pager button[disabled]{visibility:hidden}
+
+/* componentes visuales */
+.articles{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.art{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:6px;align-content:start}
+.art.key{border:2px solid var(--accent)}
+.art h4{margin:0;font-family:var(--f-display);font-size:1.05rem}
+.art p{font-size:.92rem;color:var(--muted)}
+.oe{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.oe div{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:grid;gap:4px;align-content:start}
+.oe .code{font-family:var(--f-mono);color:var(--data);font-size:.8rem}
+.oe b{font-size:1rem}
+.oe p{font-size:.88rem;color:var(--muted)}
+.goal{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.goal div{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;text-align:center}
+.goal .n{font-family:var(--f-display);font-size:2.2rem;font-weight:700;color:var(--data);line-height:1}
+.goal span{font-size:.85rem;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:6px 10px;font-size:.86rem}
+.chip.hot{border-color:var(--accent);color:var(--accent);font-weight:600}
+.gloss{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.gloss div{border-top:3px solid var(--data);background:var(--surface);padding:12px 14px;border-radius:0 0 var(--r) var(--r);border-left:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.gloss b{display:block;font-family:var(--f-display);font-size:1.02rem}
+.gloss span{font-size:.88rem;color:var(--muted)}
+
+.timeline{position:relative;display:grid;gap:0;padding-left:26px}
+.timeline::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tl{position:relative;padding:0 0 16px}
+.tl::before{content:"";position:absolute;left:-23px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--surface);border:2px solid var(--data)}
+.tl.red::before{border-color:var(--accent);background:var(--accent)}
+.tl .d{font-family:var(--f-mono);font-size:.78rem;color:var(--muted)}
+.tl b{display:block;font-weight:600}
+.tl span{font-size:.86rem;color:var(--muted)}
+
+.gauge{display:grid;gap:8px}
+.gauge .bar{height:28px;background:var(--surface-2);border-radius:6px;overflow:hidden;position:relative}
+.gauge .fill{height:100%;background:var(--accent);border-radius:6px 0 0 6px}
+.gauge .lbls{display:flex;justify-content:space-between;font-size:.82rem;color:var(--muted)}
+.gauge .big{font-family:var(--f-display);font-size:2.6rem;font-weight:700;color:var(--accent);line-height:1}
+
+.foda{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.foda>div{border-radius:var(--r);padding:14px 16px;border:1px solid var(--line);background:var(--surface);min-width:0}
+.foda h4{margin:0 0 8px;font-family:var(--f-display);font-size:1.05rem}
+.foda ul{margin:0;padding-left:18px;font-size:.9rem;display:grid;gap:4px}
+.foda .f{border-top:4px solid var(--ok)} .foda .o{border-top:4px solid var(--data)}
+.foda .d{border-top:4px solid var(--warn)} .foda .a{border-top:4px solid var(--accent)}
+
+.stairs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:end}
+.step{border-radius:var(--r) var(--r) 0 0;padding:16px;display:grid;gap:6px;align-content:start;border:1px solid var(--line);border-bottom:4px solid var(--data);background:var(--surface);min-width:0}
+.step:nth-child(1){min-height:200px} .step:nth-child(2){min-height:250px} .step:nth-child(3){min-height:300px;background:var(--data-soft);border-color:var(--data)}
+.step .k{font-family:var(--f-mono);font-size:.78rem;color:var(--data)}
+.step h4{margin:0;font-family:var(--f-display);font-size:1.15rem}
+.step p{font-size:.86rem;color:var(--muted)}
+.step .now{font-size:.82rem}
+.step .now b{color:var(--accent)}
+
+.tabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:8px 12px;font:600 .92rem var(--f-body);color:var(--muted);cursor:pointer}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+
+.flow{display:flex;align-items:stretch;gap:0;overflow-x:auto;padding-bottom:4px}
+.node{flex:1 0 150px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;display:grid;gap:4px}
+.node b{font-family:var(--f-display);font-size:1.1rem}
+.node span{font-size:.82rem;color:var(--muted)}
+.arrow{flex:0 0 44px;display:grid;place-items:center;color:var(--data);font-size:1.4rem}
+.clock{margin-top:10px;display:flex;gap:10px;align-items:center;font-size:.9rem}
+
+.ring{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.ring div{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:grid;gap:4px;align-content:start;min-width:0}
+.ring .k{font-family:var(--f-mono);color:var(--data);font-size:.78rem}
+.ring b{font-family:var(--f-display);font-size:1.02rem}
+.ring p{font-size:.84rem;color:var(--muted)}
+.base{margin-top:8px;background:var(--hero);color:var(--hero-fg);border-radius:var(--r);padding:16px;display:grid;gap:4px}
+.base b{font-family:var(--f-display);font-size:1.1rem}
+.base p{color:var(--hero-muted);font-size:.9rem}
+
+.layers{display:grid;gap:6px}
+.layer{display:grid;grid-template-columns:200px 1fr;gap:12px;align-items:center;padding:10px 14px;border-radius:8px;background:var(--surface);border:1px solid var(--line)}
+.layer b{font-family:var(--f-display)}
+.layer span{font-size:.88rem;color:var(--muted)}
+.layer:first-child{border-left:5px solid var(--accent)}
+.layer:last-child{border-left:5px solid var(--data)}
+
+.shield{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.shield div{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:grid;grid-template-columns:36px 1fr;gap:4px 10px;align-content:start}
+.shield .i{grid-row:span 2;width:32px;height:32px;border-radius:8px;background:var(--accent);color:#fff;display:grid;place-items:center;font:700 .9rem var(--f-mono)}
+.shield b{font-size:.95rem}
+.shield p{font-size:.84rem;color:var(--muted)}
+
+.steps14{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.steps14>div{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;display:grid;gap:4px;align-content:start}
+.steps14 .top{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.steps14 .k{font-family:var(--f-mono);color:var(--accent);font-size:.8rem}
+.steps14 b{font-size:.98rem}
+.steps14 p{font-size:.84rem;color:var(--muted)}
+.steps14 small{font-size:.76rem;color:var(--data);font-weight:600}
+
+.gantt{display:grid;gap:8px;min-width:640px}
+.g-axis{position:relative;height:22px;margin-left:190px;border-bottom:1px solid var(--line)}
+.g-axis span{position:absolute;top:0;font-family:var(--f-mono);font-size:.74rem;color:var(--muted);transform:translateX(-50%)}
+.g-row{display:grid;grid-template-columns:180px 1fr;gap:10px;align-items:center}
+.g-row .lbl{font-size:.86rem;font-weight:600}
+.g-row .lbl small{display:block;font-weight:400;color:var(--muted);font-size:.76rem}
+.g-track{position:relative;height:34px;background:var(--surface-2);border-radius:6px}
+.g-bar{position:absolute;top:4px;bottom:4px;border-radius:5px;background:var(--data);color:#fff;font-size:.74rem;font-weight:600;display:flex;align-items:center;padding:0 8px;overflow:hidden;white-space:nowrap}
+.g-bar.f0{background:var(--accent)}
+.g-grid{position:absolute;top:0;bottom:0;width:1px;background:var(--line)}
+.g-desc{grid-column:2;font-size:.82rem;color:var(--muted);margin-top:-4px}
+
+.stack{display:flex;height:44px;border-radius:8px;overflow:hidden;border:1px solid var(--line)}
+.stack div{display:flex;align-items:center;justify-content:center;color:#fff;font:600 .82rem var(--f-body);min-width:0}
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px;margin-top:12px}
+.legend div{display:grid;grid-template-columns:14px auto 1fr;gap:8px;align-items:start;font-size:.88rem}
+.legend i{width:14px;height:14px;border-radius:3px;margin-top:4px}
+.legend b{font-variant-numeric:tabular-nums}
+.legend span{color:var(--muted)}
+
+.kpi-feature{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.kf{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:10px}
+.kf .t{font-size:.82rem;color:var(--muted);font-weight:600}
+.kf .vals{display:flex;align-items:baseline;gap:10px;font-family:var(--f-display)}
+.kf .from{font-size:1.4rem;color:var(--muted)}
+.kf .to{font-size:2.2rem;font-weight:700;color:var(--data);line-height:1}
+.kf .ar{color:var(--muted)}
+.kbar{position:relative;height:10px;background:var(--surface-2);border-radius:5px}
+.kbar .m{position:absolute;top:0;bottom:0;left:0;background:var(--data);border-radius:5px;opacity:.35}
+.kbar .b{position:absolute;top:-3px;width:4px;height:16px;background:var(--accent);border-radius:2px}
+.kf small{font-size:.76rem;color:var(--muted)}
+.cadence{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.cadence div{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px;display:grid;gap:4px;align-content:start;min-width:0}
+.cadence b{font-family:var(--f-display);color:var(--data)}
+.cadence span{font-size:.84rem;color:var(--muted)}
+
+.org{display:grid;gap:10px;justify-items:center}
+.org .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;width:100%}
+.org .box{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:grid;gap:4px;align-content:start}
+.org .box.top{border:2px solid var(--accent);max-width:520px;width:100%}
+.org .box b{font-family:var(--f-display);font-size:1.05rem}
+.org .box span{font-size:.84rem;color:var(--muted)}
+.org .box em{font-style:normal;font-size:.84rem}
+.org .vline{width:2px;height:16px;background:var(--line)}
+
+.heat{display:grid;grid-template-columns:90px repeat(3,minmax(0,1fr));gap:6px;min-width:560px}
+.heat .h{font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;display:flex;align-items:center;justify-content:center;text-align:center}
+.heat .cell{border-radius:8px;padding:10px;min-height:96px;display:flex;flex-direction:column;gap:6px;border:1px solid var(--line)}
+.heat .c1{background:var(--warn-soft)} .heat .c2{background:var(--accent-soft)} .heat .c3{background:var(--accent-soft);border:2px solid var(--accent)} .heat .c0{background:var(--surface-2)}
+.heat .cell span{font-size:.8rem;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:4px 7px}
+
+.raci td.c{text-align:center;font-family:var(--f-mono);font-weight:500}
+.r-R{background:var(--accent-soft);color:var(--accent)} .r-A{background:var(--data-soft);color:var(--data)} .r-C{background:var(--warn-soft);color:var(--warn)} .r-I{color:var(--muted)}
+
+details{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 16px}
+details summary{cursor:pointer;font-weight:600}
+details[open] summary{margin-bottom:10px}
+
+.note{font-size:.82rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+footer{border-top:1px solid var(--line);background:var(--surface)}
+footer .wrap{padding-block:16px;font-size:.8rem;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.kbd{font-family:var(--f-mono);font-size:.75rem;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 5px;background:var(--surface)}
+
+.view{animation:in .35s ease both}
+@keyframes in{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.view{animation:none}.card{transition:none}}
+
+@media (max-width:860px){
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ring,.cadence{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .layer{grid-template-columns:1fr;gap:2px}
+  .dots{display:none}
+}
+@media (max-width:560px){
+  .levels-strip,.stairs,.goal,.foda{grid-template-columns:1fr}
+  .step:nth-child(n){min-height:0}
+  .ring,.cadence{grid-template-columns:1fr}
+  .pager{grid-template-columns:1fr}
+  .hero .wrap{padding-block:30px}
+}
+</style>
+
+<header class="topbar">
+  <div class="wrap">
+    <button class="brand" id="home-btn" type="button" aria-label="Ir a la portada">
+      <span class="seal">MP</span>
+      <span><b>Fiscalía Digital Transparente</b><small>Plan de Transformación Digital 2027–2030</small></span>
+    </button>
+    <nav class="dots" id="dots" aria-label="Puntos del plan"></nav>
+    <button class="tool" id="fs-btn" type="button" title="Pantalla completa (F)">Pantalla completa</button>
+  </div>
+</header>
+
+<main id="app"></main>
+
+<footer>
+  <div class="wrap">
+    <span>Propuesta académica · Doctorado en Gobierno y Transformación Digital, UNI · Lima, octubre 2026. No representa la posición oficial del Ministerio Público.</span>
+    <span>Navega con <span class="kbd">←</span> <span class="kbd">→</span> · <span class="kbd">Inicio</span> vuelve a la portada</span>
+  </div>
+</footer>
+
+<script>
+const S = [
+ {id:"resolucion", t:"Proyecto de Resolución", s:"El acto que aprueba el Plan y lo declara prioridad institucional permanente.", ref:"RFN N° ___-2026-MP-FN"},
+ {id:"generales", t:"Disposiciones generales", s:"Finalidad, objetivo al 2030, siete objetivos específicos, alcance y base legal.", ref:"Título I"},
+ {id:"diagnostico", t:"Diagnóstico del estado actual", s:"Trayectoria 2020–2026, 6,1 % de ejecución, FODA y el referente de España.", ref:"Título II"},
+ {id:"niveles", t:"Niveles y dominios", s:"De escanear papel a decidir con datos: procesos, productos, EX y CX.", ref:"Título III"},
+ {id:"marco", t:"Marco de transformación", s:"Seis elementos y ocho capas de arquitectura, con el blindaje como base.", ref:"Título IV"},
+ {id:"blindaje", t:"Desafíos y blindaje", s:"Cuatro desafíos clásicos, la inestabilidad política y diez mecanismos de protección.", ref:"Título V"},
+ {id:"estrategia", t:"Estrategia e implementación", s:"Catorce pasos, hoja de ruta en cinco fases y presupuesto de S/ 125 M.", ref:"Título VI"},
+ {id:"kpis", t:"Claves para medir el éxito", s:"Dieciséis indicadores de valor público, con línea base y meta 2030.", ref:"Título VII"},
+ {id:"gobernanza", t:"Gobernanza y riesgos", s:"Órganos de gobierno y matriz de riesgos con su mitigación.", ref:"Título VIII"},
+ {id:"disposiciones", t:"Disposiciones complementarias", s:"Plazos para la directiva, el anteproyecto de ley y la formación.", ref:"Disposiciones"},
+ {id:"anexos", t:"Anexos", s:"Cronología de la Fiscalía Digital de España, matriz RACI y fuentes.", ref:"Anexos 1–3"}
+];
+
+const pad = n => String(n).padStart(2,"0");
+const list = a => `<ul class="clean">${a.map(x=>`<li>${x}</li>`).join("")}</ul>`;
+const table = (h,rows) => `<div class="tbl-wrap"><table><thead><tr>${h.map(x=>`<th>${x}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+const block = (title, sub, body) => `<section class="block"><h3>${title}${sub?` <span class="mono">${sub}</span>`:""}</h3>${body}</section>`;
+
+/* ---------- contenido de cada punto ---------- */
+const V = {};
+
+V.resolucion = () => `
+${block("Vistos y considerandos","", `<div class="timeline">
+  ${[
+   ["Constitución, arts. 158–159","El MP conduce la investigación del delito y ejerce la acción penal pública."],
+   ["08/07/2020 · Préstamo BID 4959/OC-PE","Financia la mejora de la justicia penal (PJ + MP), donde se inscribe la Carpeta Fiscal Electrónica."],
+   ["2025 · Leyes 32374 y 32348","Remisión digital de la carpeta fiscal y Sistema Nacional de Flagrancia: soporte legal del expediente electrónico."],
+   ["03/09/2025 · Ejecución de 6,1 %","De S/ 125 M asignados. Se necesita un instrumento que asegure continuidad, gobernanza y medición.",1],
+   ["02/09/2026 · RFN 2696-2026-MP-FN","Aprueba el Sistema CFE, su interoperabilidad con el EJE y el piloto de Flagrancia en Lima Sur."],
+   ["DL 1412 · DU 006-2020 · PNTD 2030","Marco de Gobierno Digital y Transformación Digital del Estado."]
+  ].map(([d,x,r])=>`<div class="tl${r?" red":""}"><span class="d">${d}</span><span style="display:block">${x}</span></div>`).join("")}
+</div>`)}
+${block("Se resuelve","4 artículos", `<div class="articles">
+  <div class="art"><span class="pill">Artículo 1</span><h4>Aprobar el Plan</h4><p>“Fiscalía Digital Transparente 2027–2030” como anexo de la resolución.</p></div>
+  <div class="art key"><span class="pill red">Artículo 2 · clave</span><h4>Prioridad institucional permanente</h4><p>Modificarlo, suspenderlo o desactivarlo exige informe técnico del Comité de TD, opinión del Consejo Consultivo y acuerdo de la Junta de Fiscales Supremos.</p></div>
+  <div class="art"><span class="pill">Artículo 3</span><h4>Implementar y reportar</h4><p>Gerencia General, UE 011 y OGTI ejecutan; el avance se publica cada trimestre en el Portal de Transparencia.</p></div>
+  <div class="art"><span class="pill">Artículo 4</span><h4>Publicar</h4><p>En El Peruano y en la sede digital gob.pe/mpfn.</p></div>
+</div>`)}
+<div class="callout"><b>Idea fuerza:</b> el artículo 2 convierte una decisión de gestión en un compromiso colegiado. Ninguna jefatura puede detener el Plan por sí sola.</div>`;
+
+V.generales = () => `
+${block("Finalidad","Art. 1", `<p class="quote">Que la investigación y persecución del delito se desarrolle sobre un Expediente Fiscal Electrónico que garantice la seguridad, integridad, trazabilidad y transparencia de cada actuación.</p>`)}
+${block("Objetivo general al 31/12/2030","Art. 2", `<div class="goal">
+  <div><div class="n">100 %</div><span>de carpetas fiscales nuevas en la CFE</span></div>
+  <div><div class="n">34</div><span>distritos fiscales, interoperando con PJ y PNP</span></div>
+  <div><div class="n">1</div><span>tablero público de desempeño con trazabilidad completa</span></div>
+</div>`)}
+${block("Objetivos específicos","Art. 3", `<div class="oe">${[
+ ["OE1","Procesos","Rediseñar y digitalizar de extremo a extremo el proceso penal, empezando por flagrancia."],
+ ["OE2","Seguridad e integridad","Firma digital, sellado de tiempo y registro inmutable de accesos."],
+ ["OE3","Transparencia","Reparto aleatorio auditable, Casilla Fiscal Electrónica y “Mi Carpeta” ciudadana."],
+ ["OE4","Interoperabilidad","CFE integrada con EJE, PNP, INPE, RENIEC, Medicina Legal y PIDE."],
+ ["OE5","Talento y cultura","Competencias digitales y cultura orientada al dato."],
+ ["OE6","Gestión basada en datos","Observatorio fiscal tipo DATALAB, analítica e IA responsable."],
+ ["OE7","Sostenibilidad","Blindar el Plan frente a la inestabilidad política."]
+].map(([c,b,p])=>`<div><span class="code">${c}</span><b>${b}</b><p>${p}</p></div>`).join("")}</div>`)}
+${block("Alcance","Art. 4", `<div class="panel">Obligatorio para todos los órganos fiscales, la UE 011, Medicina Legal y la Escuela del MP en los <b>34 distritos fiscales</b>. Primera etapa: <b>proceso penal común y proceso inmediato (flagrancia)</b>. Civil, familia y prevención se suman en el escalamiento.</div>`)}
+${block("Base legal","Art. 5", `<div class="chips">${["Constitución 2, 158, 159","DL 052 – LOMP","NCPP (DL 957)","Ley 32374","Ley 32348","DL 1412 Gobierno Digital","DU 006-2020","DU 007-2020 Confianza Digital","DS 085-2023-PCM (PNTD 2030)","Ley 27269 Firmas digitales","Ley 29733 Datos personales","Ley 27806 Transparencia","Ley 31814 IA","Ley 30096 Delitos informáticos","BID 4959/OC-PE","RFN 2696-2026-MP-FN","PEI 2023–2030","NTP-ISO/IEC 27001"].map(x=>`<span class="chip${/32374|32348|2696/.test(x)?" hot":""}">${x}</span>`).join("")}</div>`)}
+${block("Definiciones","Art. 6", `<div class="gloss">${[
+ ["EFE / CFE","Datos estructurados y documentos firmados que forman la investigación: “del documento al dato”."],
+ ["EJE","Expediente Judicial Electrónico del Poder Judicial."],
+ ["Casilla Fiscal Electrónica","Domicilio digital para notificar a partes y abogados."],
+ ["Registro inmutable","Bitácora de accesos que no se puede alterar (sellado de tiempo, hash encadenado)."],
+ ["Reparto aleatorio auditable","Asignación automática de casos con reglas públicas y registro verificable."],
+ ["PMO Digital","Oficina de Gestión del Programa, a cargo de la UE 011."]
+].map(([b,s])=>`<div><b>${b}</b><span>${s}</span></div>`).join("")}</div>`)}`;
+
+V.diagnostico = () => `
+<div class="cols">
+ ${block("Trayectoria 2020–2026","2.1", `<div class="timeline">${[
+  ["08/07/2020","Préstamo BID 4959/OC-PE","US$ 100 M para PJ + MP"],
+  ["24/09/2020","Se crea la UE 011","RFN 1049-2020-MP-FN"],
+  ["05/11/2020","Manual Operativo del Programa","RFN 1226-2020-MP-FN"],
+  ["2021–2025","Crisis en la Fiscalía de la Nación","Cambios sucesivos de jefatura; el proyecto se ralentiza",1],
+  ["11/06/2024","Actualización del MOP","RGG 000355-2024-MP-FN-GG"],
+  ["Jun. 2025","Remisión digital de la carpeta","Ley 32374 modifica el NCPP"],
+  ["03/09/2025","6,1 % de ejecución","De S/ 125 M asignados (PCM)",1],
+  ["07/05/2026","Se reconforma la Comisión CFE","RFN 1320-2026-MP-FN"],
+  ["02/09/2026","Sistema CFE + piloto Lima Sur","RFN 2696-2026-MP-FN"]
+ ].map(([d,b,s,r])=>`<div class="tl${r?" red":""}"><span class="d">${d}</span><b>${b}</b><span>${s}</span></div>`).join("")}</div>`)}
+ <div class="block" style="align-content:start">
+  <h3>El síntoma <span class="mono">2.2</span></h3>
+  <div class="panel gauge">
+   <span class="eyebrow">Ejecución presupuestal CFE · set. 2025</span>
+   <span class="big tnum">6,1 %</span>
+   <div class="bar" role="img" aria-label="6,1 por ciento de 125 millones de soles"><div class="fill" style="width:6.1%"></div></div>
+   <div class="lbls tnum"><span>≈ S/ 7,6 M ejecutados</span><span>S/ 125 M asignados</span></div>
+  </div>
+  <div class="panel gauge">
+   <span class="eyebrow">Percepción de corrupción · Ipsos-Proética 2025</span>
+   <span class="big tnum">35 %</span>
+   <span style="font-size:.9rem;color:var(--muted)">El MP es percibido como la 2.ª institución más corrupta del país.</span>
+  </div>
+ </div>
+</div>
+${block("Problemática identificada","2.2", `<div class="cols">${[
+ ["Discontinuidad política","Varias jefaturas entre 2021 y 2026; el proyecto quedó truncado en su fase crítica (2021–2022).","red"],
+ ["Baja ejecución","6,1 % al 2025; en el POA 2024 el componente MP recibió S/ 110 mil (0,2 %) de S/ 68,8 M.","red"],
+ ["Asimetría con el PJ","El EJE opera en cientos de juzgados; la CFE recién inicia en un distrito.","warn"],
+ ["Carpetas en papel","Pérdida, sustracción, alteración de folios y megacasos inmanejables.","warn"],
+ ["Sistemas en silos","SGF y aplicativos aislados, sin datos estructurados ni estándares.","warn"],
+ ["Brecha digital","Competencias limitadas en fiscales y personal; resistencia al cambio.","warn"]
+].map(([b,p,c])=>`<div class="panel" style="display:grid;gap:6px"><span class="pill ${c}">${c==="red"?"Crítico":"Alto"}</span><b>${b}</b><span style="font-size:.9rem;color:var(--muted)">${p}</span></div>`).join("")}</div>`)}
+${block("Análisis FODA","2.3", `<div class="foda">
+ <div class="f"><h4>Fortalezas</h4><ul><li>Financiamiento BID ya contratado</li><li>UE 011 y MOP constituidos</li><li>Base legal reciente (Leyes 32374, 32348; RFN 2696-2026)</li><li>Piloto Lima Sur aprobado</li></ul></div>
+ <div class="o"><h4>Oportunidades</h4><ul><li>EJE del PJ maduro para interoperar</li><li>Política Nacional de TD al 2030 y PIDE</li><li>Firma digital y RENIEC disponibles</li><li>Referente: Fiscalía Digital de España</li></ul></div>
+ <div class="d"><h4>Debilidades</h4><ul><li>Ejecución de 6,1 %</li><li>Rotación de equipos y jefaturas</li><li>Sistemas heredados en silos</li><li>Brecha de competencias digitales</li></ul></div>
+ <div class="a"><h4>Amenazas</h4><ul><li>Inestabilidad política</li><li>Ciberataques a información sensible</li><li>Recortes presupuestales</li><li>Captura por intereses que se benefician de la opacidad</li></ul></div>
+</div>`)}
+${block("Referente internacional: Fiscalía Digital de España","2.4", table(["Elemento","Qué hizo España","Lección para el MP-FN"],[
+ ["<b>Piloto Valladolid (2016)</b>","~100 usuarios: Fortuny, Portafirmas, gestor documental y visor Horus.","Empezar pequeño y escalar: Lima Sur cumple ese rol."],
+ ["<b>Fortuny → Atenea</b>","Gestión procesal que evolucionó a plataforma interoperable con juzgados.","Diseñar desde el inicio para interoperar con el EJE."],
+ ["<b>Horus</b>","Visor del expediente judicial completo en pantalla.","Visor único de carpeta + expediente judicial."],
+ ["<b>LexNET</b>","68 millones de comunicaciones electrónicas en 2016.","Casilla Fiscal integrada a la casilla del PJ."],
+ ["<b>CTEAJE</b>","Comité técnico que coordina 13 administraciones.","Consejo Interinstitucional MP–PJ–PNP–MINJUS–PCM."],
+ ["<b>RDL 6/2023 y LO 1/2025</b>","Expediente como datos estructurados y plazos de interoperabilidad.","Blindaje normativo con rango de ley."],
+ ["<b>DATALAB (2023)</b>","Cuadros de mando y acceso ciudadano con Cl@ve.","Observatorio fiscal y “Mi Carpeta”."],
+ ["<b>Fragmentación</b> <span class='pill warn'>riesgo</span>","Trece sistemas distintos complicaron la interoperabilidad.","Un único estándar nacional, no sistemas por distrito."]
+]))}`;
+
+V.niveles = () => `
+${block("Tres niveles de evolución tecnológica","3.1", `<div class="stairs">
+ <div class="step"><span class="k">Nivel 1</span><h4>Digitación</h4><p>Pasar información física a formato digital.</p><p class="now"><b>Hoy:</b> escaneo parcial; PDFs sin estructura ni firma.</p></div>
+ <div class="step"><span class="k">Nivel 2</span><h4>Digitalización</h4><p>Automatizar e interconectar flujos de trabajo.</p><p class="now"><b>Hoy:</b> SGF aislado; piloto CFE en Lima Sur (2026).</p><p class="now">Meta 2027–2029: CFE nacional con firma e interoperabilidad con el EJE.</p></div>
+ <div class="step"><span class="k">Nivel 3 · objetivo</span><h4>Transformación digital</h4><p>Reorganizar la institución en torno al dato.</p><p class="now"><b>Hoy:</b> inexistente.</p><p class="now">Meta 2029–2030: reparto aleatorio, observatorio, IA responsable y servicios ciudadanos.</p></div>
+</div>
+<div class="callout"><b>Error histórico:</b> confundir el nivel 1 (escanear carpetas) con la transformación. El Plan apunta al nivel 3.</div>`)}
+${block("Flujo de flagrancia de extremo a extremo","Ley 32348", `<div class="flow" role="img" aria-label="Flujo PNP a MP a PJ en menos de 48 horas">
+ <div class="node"><b>PNP</b><span>Denuncia y atestado digital con código único</span></div><div class="arrow">→</div>
+ <div class="node"><b>MP · CFE</b><span>Reparto aleatorio, firma digital y requerimiento</span></div><div class="arrow">→</div>
+ <div class="node"><b>PJ · EJE</b><span>Remisión digital (Ley 32374) y audiencia</span></div>
+</div>
+<div class="clock"><span class="pill teal">Meta</span> Todo el circuito en digital en <b>menos de 48 horas</b>.</div>`)}
+${block("Cuatro dominios de transformación","3.2–3.5", `<div class="tabs" role="tablist" id="dom-tabs">
+ ${["Procesos","Productos y servicios","Experiencia del empleado","Experiencia del ciudadano"].map((x,i)=>`<button role="tab" type="button" aria-selected="${i===0}" data-i="${i}">${x}</button>`).join("")}
+</div>
+<div id="dom-panel"></div>`)}`;
+
+const DOM = [
+ () => `<p style="color:var(--muted);margin-bottom:12px">Tres palancas: consolidar flujos redundantes, crear flujos inteligentes y automatizar tareas manuales.</p><div class="cols">${[
+  ["Recepción única de denuncias","Presencial, PNP y en línea; genera la CFE con código compartido."],
+  ["Reparto aleatorio y auditable","Reglas públicas y bitácora verificable, sin asignación discrecional."],
+  ["Firma digital y sellado de tiempo","En disposiciones, requerimientos y actas, con plantillas inteligentes."],
+  ["Notificación electrónica","A partes y abogados por la Casilla Fiscal Electrónica."],
+  ["Plazos con alertas","Semáforo automático de plazos de investigación y detenciones."],
+  ["Cadena de custodia digital","Evidencias con hash y trazabilidad."],
+  ["Remisión digital al PJ","Por interoperabilidad, según la Ley 32374."]
+ ].map(([b,p])=>`<div class="panel" style="display:grid;gap:4px"><b>${b}</b><span style="font-size:.9rem;color:var(--muted)">${p}</span></div>`).join("")}</div>`,
+ () => table(["Producto","Descripción","Usuario"],[
+  ["<b>Sistema CFE</b>","Núcleo de gestión con datos estructurados, firma y bitácora inmutable.","Fiscales y asistentes"],
+  ["<b>Visor Fiscal Integrado</b> (tipo Horus)","Carpeta y expediente judicial en una sola vista, con búsqueda.","Fiscales"],
+  ["<b>Casilla Fiscal Electrónica</b>","Notificaciones y escritos, integrada a la casilla del PJ.","Abogados y partes"],
+  ["<b>Mesa de Partes Digital</b>","Denuncias y escritos 24/7.","Ciudadanía"],
+  ["<b>“Mi Carpeta”</b>","Estado del caso en línea con identidad digital (RENIEC / ID Gob.pe).","Víctimas, imputados, abogados"],
+  ["<b>Observatorio Fiscal</b> (tipo DATALAB)","Carga, plazos, productividad y datos abiertos anonimizados.","Jefaturas, ciudadanía, academia"],
+  ["<b>Asistente IA</b> <span class='pill'>fase 4</span>","Resumen de megacasos y búsqueda de precedentes, con supervisión humana.","Fiscales"]
+ ]),
+ () => list([
+  "Interfaz diseñada con fiscales (service design) y probada en Lima Sur antes de escalar.",
+  "Firma digital en token o en la nube; acceso seguro con VPN y doble factor.",
+  "Red de <b>Fiscales Embajadores Digitales</b> en cada distrito fiscal.",
+  "Formación certificada por la Escuela del MP, vinculada a la evaluación de desempeño.",
+  "Mesa de ayuda 24/7 y <b>hipercuidado de 90 días</b> en cada despliegue.",
+  "Menos foliado, copias y traslados: más tiempo para investigar.",
+  "Encuesta semestral de satisfacción interna (eNPS)."
+ ]),
+ () => `<div class="callout teal" style="margin-bottom:12px"><b>El “cliente” es el ciudadano justiciable:</b> víctima, denunciante, imputado y su defensa. La CX convierte la CFE en un instrumento de confianza.</div>` + list([
+  "<b>“Mi Carpeta”:</b> estado, fiscal a cargo, plazos y próximas diligencias, con reserva de lo protegido por ley.",
+  "<b>Trazabilidad visible:</b> la parte ve quién accedió a su carpeta y cuándo.",
+  "Notificaciones por SMS o correo de cada actuación relevante.",
+  "Canal preferente para víctimas y seguimiento de medidas de protección.",
+  "Datos abiertos anonimizados por distrito fiscal.",
+  "Atención en lenguas originarias y presencial asistida para quien no tiene acceso digital."
+ ])
+];
+
+V.marco = () => `
+${block("Seis elementos del marco","4.1", `<div class="ring">${[
+ ["1","Visión y objetivos","“Al 2030, una Fiscalía 100 % digital, segura y transparente, donde cada caso es trazable”. OE1–OE7."],
+ ["2","Evaluación inicial","Auditoría de la UE 011, inventario de sistemas e infraestructura, líneas base."],
+ ["3","Hoja de ruta","Cuatro fases 2026–2030: fundamentos, piloto, escalamiento, dato."],
+ ["4","Gestión del cambio","Comunicación, embajadores, formación certificada e incentivos (ADKAR)."],
+ ["5","Métricas y KPI","Tablero de indicadores publicado cada trimestre."]
+].map(([k,b,p])=>`<div><span class="k">Elemento ${k}</span><b>${b}</b><p>${p}</p></div>`).join("")}</div>
+<div class="base"><span class="eyebrow" style="color:var(--hero-muted)">Elemento 6 · aporte de este Plan</span><b>Blindaje institucional</b><p>Mecanismos normativos, contractuales, organizativos y de rendición de cuentas que hacen costoso y difícil interrumpir el Plan.</p></div>`)}
+${block("Arquitectura por capas","4.2", `<div class="layers">${[
+ ["Gobernanza","Comité de Gobierno y TD; Consejo Consultivo Interinstitucional; PMO Digital (UE 011)."],
+ ["Normativa","Leyes 32374 y 32348, RFN 2696-2026, propuesta de “Ley del Expediente Fiscal Electrónico”."],
+ ["Procesos","Procesos fiscales rediseñados en BPMN, empezando por flagrancia."],
+ ["Datos","Modelo estructurado de la carpeta, diccionario común con el PJ, anonimización y datos abiertos."],
+ ["Aplicaciones","CFE, visor integrado, casilla, mesa de partes, “Mi Carpeta”, observatorio."],
+ ["Interoperabilidad","Servicios sobre PIDE con EJE, PNP, RENIEC, INPE y Medicina Legal."],
+ ["Infraestructura y seguridad","Data center principal y de contingencia, nube híbrida soberana, ISO 27001, SOC 24/7."],
+ ["Personas","Competencias digitales, nuevos roles (datos, procesos) y cultura de colaboración."]
+].map(([b,s])=>`<div class="layer"><b>${b}</b><span>${s}</span></div>`).join("")}</div>`)}
+${block("Beneficios esperados","4.3", `<div class="chips">${["Alineación con la misión (PEI)","Gobernanza, riesgo y cumplimiento","Decisiones basadas en datos","Transparencia y anticorrupción","Escalable de 1 a 34 distritos","Ahorro en papel, traslados y foliado","Sostenibilidad ambiental"].map(x=>`<span class="chip">${x}</span>`).join("")}</div>`)}`;
+
+V.blindaje = () => `
+${block("Cuatro desafíos y su respuesta","5.1", table(["Desafío","Cómo se manifiesta en el MP-FN","Respuesta del Plan"],[
+ ["<b>1. Resistencia al cambio</b>","Hábito del papel; temor a la exposición que genera la trazabilidad.","Co-diseño, embajadores digitales, comunicar beneficios y obligatoriedad progresiva."],
+ ["<b>2. Competencias digitales</b>","Brecha generacional y territorial; poca formación en firma digital.","Programa certificado de la Escuela del MP (básico, intermedio, avanzado) y soporte en sitio."],
+ ["<b>3. Sistemas heredados</b>","SGF y aplicativos aislados; carpetas físicas en trámite.","Integración por APIs, migración por etapas y “solo lo nuevo en digital” desde la fecha de corte."],
+ ["<b>4. Gestión de datos</b>","Datos no estructurados y duplicados; información sensible.","Gobierno de datos, diccionario común con el PJ, anonimización e ISO 27001."]
+]))}
+${block("El quinto desafío: la inestabilidad política","5.2", `<div class="callout"><b>El principal riesgo no es tecnológico, es político-institucional.</b> En 2021–2022 el proyecto se truncó por la crisis en la conducción del MP. A las causas de fracaso que señala Paul Wilkinson (falta de alineación, pocas competencias, negación del cambio cultural) se suma la discontinuidad de la alta dirección.</div>`)}
+${block("Diez mecanismos de blindaje","", `<div class="shield">${[
+ ["Norma con rango de ley","“Ley del Expediente Fiscal Electrónico” (modelo RDL 6/2023). Ninguna jefatura la deroga por resolución."],
+ ["Prioridad institucional permanente","Suspenderla exige informe técnico y acuerdo de la Junta de Fiscales Supremos."],
+ ["Compromisos con el BID","Metas y cláusulas en el MOP: abandonar tiene costo financiero y reputacional."],
+ ["PMO profesional y estable","Equipo por concurso con contratos ligados al proyecto, no a la gestión."],
+ ["Consejo Consultivo Interinstitucional","Aliados externos (PJ, PNP, MINJUS, PCM, Defensoría, sociedad civil) que exigen continuidad."],
+ ["Tablero público trimestral","Prensa, Congreso y ciudadanía ven el retraso: sube el costo político."],
+ ["Victorias tempranas","Casilla, reparto aleatorio y “Mi Carpeta” crean usuarios que defienden el sistema."],
+ ["Inserción en el planeamiento","PEI, POI, Programación Multianual y presupuesto por resultados."],
+ ["Control concurrente","Contraloría y auditoría externa anual detectan paralizaciones injustificadas."],
+ ["Arquitectura abierta","Código propiedad del Estado y estándares abiertos: nada depende de personas clave."]
+].map(([b,p],i)=>`<div><span class="i">${i+1}</span><b>${b}</b><p>${p}</p></div>`).join("")}</div>`)}`;
+
+const PH = [
+ ["Fase 0","Fundamentos y blindaje","Nov. 26 – Mar. 27",0,5,"Plan aprobado, Comité y Consejo instalados, PMO completa, línea base, tablero público, proyecto de ley."],
+ ["Fase 1","Consolidación del piloto","Abr. – Dic. 2027",5,14,"Lima Sur interoperando con EJE, dos pilotos más, Casilla Fiscal y reparto aleatorio."],
+ ["Fase 2","Escalamiento","2028",14,26,"Flagrancia en todos los distritos; proceso común en Lima y Callao; “Mi Carpeta”; data center de contingencia."],
+ ["Fase 3","Cobertura nacional","2029",26,38,"Proceso común en 34 distritos; integración con PNP, INPE y Medicina Legal; cero papel en carpetas nuevas."],
+ ["Fase 4","Fiscalía orientada al dato","2030",38,50,"Observatorio con datos abiertos, IA para megacasos y evaluación de impacto independiente."]
+];
+const BUD = [["Plataforma CFE e interoperabilidad",35,"var(--data)","Desarrollo, licencias, integración con EJE, PNP y PIDE."],["Infraestructura y ciberseguridad",25,"#2f4b7c","Data centers, nube, SOC, SGSI."],["Equipamiento y firma digital",15,"#6b5ca5","Escáneres, equipos, certificados y tokens."],["Gestión del cambio y formación",12,"var(--warn)","Escuela del MP, embajadores, soporte en sitio."],["PMO, monitoreo y evaluación",8,"var(--accent)","Equipo, tablero, auditoría externa."],["Contingencias",5,"#7a8494","Riesgos y ajustes."]];
+
+V.estrategia = () => `
+${block("Hoja de ruta por fases","6.4", `<div class="tbl-wrap" style="padding:16px"><div class="gantt">
+ <div class="g-axis">${[["2027",2],["2028",14],["2029",26],["2030",38]].map(([l,m])=>`<span style="left:${m/50*100}%">${l}</span>`).join("")}</div>
+ ${PH.map(([f,n,p,a,b,d],i)=>`<div class="g-row"><div class="lbl">${f}<small>${n}</small></div><div class="g-track">${[2,14,26,38].map(m=>`<i class="g-grid" style="left:${m/50*100}%"></i>`).join("")}<div class="g-bar${i===0?" f0":""}" style="left:${a/50*100}%;width:${(b-a)/50*100}%">${p}</div></div><div class="g-desc">${d}</div></div>`).join("")}
+</div></div>`)}
+${block("Catorce pasos aplicados al MP-FN","6.1", `<div class="steps14">${[
+ ["Comprender el estado actual","Auditoría de la UE 011, inventario de sistemas, línea base y lecciones de Lima Sur.","UE 011 / OGTI","Nov. 26 – Feb. 27"],
+ ["Conseguir apoyo","Caso ante la Junta de Fiscales Supremos, PCM, MEF, BID y Congreso.","Fiscal de la Nación / GG","Dic. 2026"],
+ ["Establecer el presupuesto","Reprogramar los S/ 125 M e incluir mantenimiento posterior al préstamo.","OGPLAP / UE 011","Ene. 2027"],
+ ["Crear la cultura adecuada","Campaña “Fiscalía Digital Transparente” y comunidades de práctica.","Escuela del MP / Imagen","Permanente"],
+ ["Definir visión y objetivos","Talleres con fiscales, PNP y PJ; validar OE1–OE7.","Comité de TD","Ene. 2027"],
+ ["Formar el equipo","PMO Digital con arquitectos, analistas, cambio y seguridad; matriz RACI.","UE 011","Feb. 2027"],
+ ["Priorizar proyectos","Impacto/velocidad: flagrancia, casilla y reparto, proceso común, observatorio e IA.","Comité de TD","Feb. 2027"],
+ ["Seleccionar soluciones TI","Licitación BID: APIs, interoperabilidad con EJE, código del Estado.","UE 011 / BID","Mar. – Jun. 2027"],
+ ["Emplear los datos","Modelo de datos estructurado, observatorio y analítica de carga y plazos.","OGTI / Observatorio","Desde 2027"],
+ ["Ciberseguridad y cumplimiento","ISO 27001, SOC 24/7, cifrado, doble factor, Ley 29733.","Oficial de Seguridad Digital","Permanente"],
+ ["Plan de implementación","Cronograma por fases, hitos, KPIs e hipercuidado de 90 días.","PMO Digital","Mar. 2027"],
+ ["Proyectos piloto","Consolidar Lima Sur y abrir un piloto en Lima y otro en provincia.","UE 011 / Distritos","2027"],
+ ["Feedback iterativo","Retrospectivas mensuales, encuestas y mesa con PJ y PNP.","PMO Digital","Mensual"],
+ ["Seguir mejorando","Hoja de ruta anual de innovación y revisión anual del Plan.","Comité de TD","Anual"]
+].map(([b,p,r,t],i)=>`<div><div class="top"><span class="k">Paso ${pad(i+1)}</span><span class="pill">${t}</span></div><b>${b}</b><p>${p}</p><small>${r}</small></div>`).join("")}</div>`)}
+${block("Presupuesto referencial","6.5 · S/ 125 M", `<div class="panel"><div class="stack" role="img" aria-label="Distribución del presupuesto">${BUD.map(([n,p,c])=>`<div style="flex:${p};background:${c}" title="${n}: ${p} %">${p} %</div>`).join("")}</div>
+<div class="legend">${BUD.map(([n,p,c,d])=>`<div><i style="background:${c}"></i><b>${p} %</b><span><b style="color:var(--ink)">${n}</b> · S/ ${(125*p/100).toLocaleString("es-PE",{maximumFractionDigits:2})} M · ${d}</span></div>`).join("")}</div>
+<p class="note" style="margin-top:14px">Montos referenciales, a validar con el POA y el MOP vigentes. Debe preverse la operación y mantenimiento tras el cierre del préstamo.</p></div>`)}
+${block("Cuatro buenas prácticas","6.2", `<div class="cols">${[
+ ["Buscar oportunidades","Mapear los “dolores” de cada fiscalía y llevarlos al backlog."],
+ ["Iniciar el cambio organizacional","Formación y soporte; la directiva obligatoria se activa cuando el distrito está listo."],
+ ["Focalizar en las personas","Diseñar con fiscales, víctimas y abogados. La tecnología es un medio."],
+ ["Trabajar de forma ágil","Entregas cada 2–4 semanas, producto mínimo viable por proceso, sin “gran despliegue”."]
+].map(([b,p])=>`<div class="panel" style="display:grid;gap:4px"><b>${b}</b><span style="font-size:.9rem;color:var(--muted)">${p}</span></div>`).join("")}</div>`)}
+<details><summary>Estrategia digital en 10 pasos (6.3)</summary>${table(["Paso","Aplicación en el MP-FN"],[
+ ["1. Objetivos SMART","“Al 31/12/2027, el 100 % de los casos de flagrancia de 3 distritos se tramitan en la CFE y se remiten al PJ en menos de 24 horas”."],
+ ["2. Conocer a la audiencia","Fiscales, víctimas, imputados y defensa, PNP, jueces, ciudadanía y prensa."],
+ ["3. Benchmarking","EJE del PJ, España, Chile (SAF) y Colombia; evitar la fragmentación española."],
+ ["4. Propuesta de valor","“Tu caso, seguro y visible: ninguna carpeta se pierde, nadie la manipula sin dejar huella y tú puedes seguirla en línea”."],
+ ["5. Plataformas","CFE, PIDE, firma digital RENIEC, ID Gob.pe, nube híbrida, analítica."],
+ ["6. Contenidos","Guías, videotutoriales, preguntas frecuentes, boletín; lenguaje claro."],
+ ["7. Visibilidad","Integración con gob.pe; “Mi Carpeta” y mesa de partes visibles en buscadores."],
+ ["8. Redes sociales","Facebook, X, TikTok y YouTube para ciudadanía y gremios de abogados."],
+ ["9. Medición","Observatorio Fiscal y tablero de KPIs."],
+ ["10. Ajustes continuos","Revisión trimestral del Comité y anual con el Consejo Consultivo."]
+])}</details>`;
+
+V.kpis = () => `
+${block("Indicadores destacados","línea base → meta 2030", `<div class="kpi-feature">${[
+ ["Ejecución presupuestal CFE","6,1 %","≥ 90 %",6.1,90,100,"Equivale al ROI"],
+ ["Carpetas nuevas en la CFE","≈ 0 %","100 %",0,100,100,"Equivale a conversiones"],
+ ["Distritos con CFE operativa","1","34",1,34,34,"Cobertura nacional"],
+ ["Percepción de corrupción","35 %","≤ 25 %",35,25,50,"Equivale a sentimiento de marca; menos es mejor"]
+].map(([t,f,to,b,m,max,n])=>`<div class="kf"><span class="t">${t}</span><div class="vals tnum"><span class="from">${f}</span><span class="ar">→</span><span class="to">${to}</span></div><div class="kbar" role="img" aria-label="${t}: de ${f} a ${to}"><div class="m" style="width:${m/max*100}%"></div><div class="b" style="left:calc(${b/max*100}% - 2px)"></div></div><small><span style="color:var(--accent)">▮</span> línea base · <span style="color:var(--data)">▬</span> meta · ${n}</small></div>`).join("")}</div>`)}
+${block("Tablero completo","16 indicadores", table(["Dimensión","Indicador","Línea base","Meta 2030"],[
+ ["Ejecución","% de ejecución presupuestal de la CFE","6,1 % (2025)","≥ 90 %"],
+ ["Adopción","% de carpetas nuevas íntegramente en la CFE","≈ 0 % (piloto)","100 %"],
+ ["Cobertura","Distritos fiscales con CFE operativa","1 (Lima Sur)","34"],
+ ["Interoperabilidad","% de carpetas remitidas digitalmente al PJ","LB 2027","≥ 95 %"],
+ ["Eficiencia","Tiempo de remisión de carpeta en flagrancia","LB 2027","&lt; 24 horas"],
+ ["Eficiencia","Tiempo de la investigación preliminar","LB 2027","−30 %"],
+ ["Integridad","Carpetas extraviadas o alteradas","LB 2027","0"],
+ ["Seguridad","Incidentes críticos no contenidos","LB 2027","0"],
+ ["Transparencia","% de casos con reparto aleatorio auditable","LB 2027","100 %"],
+ ["Transparencia","Usuarios activos de “Mi Carpeta”","0","LB + metas anuales"],
+ ["Confianza","Percepción del MP como institución corrupta","35 % (2025)","≤ 25 %"],
+ ["CX","Satisfacción de usuarios externos (NPS)","LB 2027","≥ +30"],
+ ["EX","Satisfacción de fiscales con la CFE (eNPS)","LB 2027","≥ +20"],
+ ["Competencias","% de fiscales certificados","LB 2027","≥ 95 %"],
+ ["Sostenibilidad","Reducción del consumo de papel","LB 2027","−70 %"],
+ ["Continuidad","Reportes trimestrales publicados a tiempo","0","100 %"]
+].map(r=>[`<span class="pill teal">${r[0]}</span>`,r[1],`<span class="tnum">${r[2]}</span>`,`<b class="tnum">${r[3]}</b>`])))}
+<p class="note">“LB 2027”: línea base que se levanta en la Fase 0. Los KPI de marketing (tráfico, conversiones, ROI) se traducen a indicadores de valor público.</p>
+${block("Ritmo de seguimiento","7.1", `<div class="cadence">${[
+ ["Mensual","Reporte de la PMO al Comité de TD."],
+ ["Trimestral","Tablero en el Portal de Transparencia; informe al BID y al MEF."],
+ ["Semestral","Consejo Consultivo y encuestas EX/CX."],
+ ["Anual","Auditoría externa; informe a la Junta y al Congreso."],
+ ["2030","Evaluación de impacto independiente."]
+].map(([b,s])=>`<div><b>${b}</b><span>${s}</span></div>`).join("")}</div>`)}`;
+
+V.gobernanza = () => `
+${block("Órganos de gobierno","8.1", `<div class="org">
+ <div class="box top"><b>Comité de Gobierno y TD del MP</b><span>Fiscal de la Nación (o supremo delegado), Gerente General, jefe UE 011, Oficial de Gobierno Digital, Oficial de Seguridad Digital, dos fiscales superiores.</span><em>Aprueba prioridades, presupuesto y cambios; supervisa el avance.</em></div>
+ <div class="vline"></div>
+ <div class="row">
+  <div class="box"><b>Consejo Consultivo Interinstitucional</b><span>MP, PJ, PNP, MINJUS, PCM-SGTD, Defensoría, Colegio de Abogados, academia, sociedad civil.</span><em>Coordina interoperabilidad y opina sobre la continuidad.</em></div>
+  <div class="box"><b>PMO Digital (UE 011)</b><span>Gerente de programa y equipo técnico por concurso.</span><em>Ejecuta, monitorea, reporta y gestiona riesgos.</em></div>
+  <div class="box"><b>Red de Embajadores Digitales</b><span>Un fiscal y un servidor por distrito fiscal.</span><em>Acompaña la adopción y canaliza feedback.</em></div>
+ </div>
+</div>`)}
+${block("Mapa de calor de riesgos","8.2", `<div class="tbl-wrap" style="padding:14px;border:0;background:none"><div class="heat">
+ <div></div><div class="h">Impacto medio</div><div class="h">Impacto alto</div><div class="h">Impacto muy alto</div>
+ <div class="h">Prob. alta</div>
+ <div class="cell c2"><span>Brecha de conectividad en provincias</span></div>
+ <div class="cell c3"><span>Cambio de Fiscal de la Nación que paraliza el Plan</span><span>Baja ejecución presupuestal</span></div>
+ <div class="cell c3"></div>
+ <div class="h">Prob. media</div>
+ <div class="cell c1"><span>Dependencia de un proveedor</span></div>
+ <div class="cell c2"><span>Resistencia de fiscales</span><span>Falla de interoperabilidad con EJE</span></div>
+ <div class="cell c3"><span>Ciberataque o fuga de información</span></div>
+</div></div>`)}
+${table(["Riesgo","Mitigación"],[
+ ["<b>Cambio de Fiscal de la Nación</b>","Los 10 mecanismos de blindaje del Título V."],
+ ["<b>Baja ejecución presupuestal</b>","PMO profesional, adquisiciones BID planificadas, tablero público."],
+ ["<b>Resistencia de fiscales</b>","Co-diseño, formación, embajadores, obligatoriedad progresiva."],
+ ["<b>Falla de interoperabilidad con EJE</b>","Estándar común y mesa técnica MP–PJ permanente."],
+ ["<b>Ciberataque o fuga</b>","ISO 27001, SOC, cifrado, contingencia y auditorías."],
+ ["<b>Dependencia de proveedor</b>","Código del Estado, estándares abiertos, transferencia."],
+ ["<b>Conectividad en provincias</b>","Modo fuera de línea con sincronización; convenios con MTC."]
+])}`;
+
+V.disposiciones = () => `
+${block("Disposiciones complementarias finales","", `<div class="articles">
+ <div class="art"><span class="pill red">30 días hábiles</span><h4>Primera · Directiva de uso obligatorio</h4><p>La Gerencia General propone la directiva de uso obligatorio de la CFE por etapas.</p></div>
+ <div class="art key"><span class="pill red">60 días hábiles</span><h4>Segunda · Anteproyecto de ley</h4><p>Asesoría Jurídica elabora la “Ley del Expediente Fiscal Electrónico” para el Congreso.</p></div>
+ <div class="art"><span class="pill teal">Plan anual</span><h4>Tercera · Competencias digitales</h4><p>La Escuela del MP incorpora el programa de formación del Plan.</p></div>
+ <div class="art"><span class="pill">Cada año</span><h4>Cuarta · Revisión del Plan</h4><p>Revisión anual; cambios aprobados según el artículo 2 de la resolución.</p></div>
+</div>`)}
+${block("Disposición transitoria","Única", `<div class="callout teal"><b>“Solo lo nuevo en digital”.</b> Las carpetas en papel en trámite a la fecha de corte de cada distrito siguen en papel hasta concluir, salvo que el fiscal disponga digitalizarlas con firma y metadatos.</div>`)}`;
+
+V.anexos = () => `
+${block("Anexo 1 · Cronología de la Fiscalía Digital de España","", `<div class="timeline">${[
+ ["2011","Ley 18/2011","Regula el uso de las TIC en la Administración de Justicia."],
+ ["2016","Piloto Valladolid","Fortuny, Portafirmas, gestor documental, visor Horus. LexNET: 68 millones de comunicaciones."],
+ ["2021–2022","Fondos europeos (MRR)","Acuerdo Marco de Justicia para la TD (más de 125 M€)."],
+ ["2023","Sede electrónica y DATALAB","Acceso con Cl@ve; 18 M€ + 3,5 M€; RDL 6/2023: expediente como datos estructurados."],
+ ["2025","LO 1/2025 y Atenea-Fiscalía","Ley de eficiencia del Servicio Público de Justicia."]
+].map(([d,b,s])=>`<div class="tl"><span class="d">${d}</span><b>${b}</b><span>${s}</span></div>`).join("")}</div>`)}
+${block("Anexo 2 · Matriz RACI","", `<div class="tbl-wrap"><table class="raci"><thead><tr><th>Actividad</th><th>Fiscal de la Nación</th><th>Comité TD</th><th>UE 011 / PMO</th><th>OGTI</th><th>Escuela MP</th><th>PJ</th></tr></thead><tbody>${[
+ ["Aprobación del Plan","A","R","C","C","I","I"],
+ ["Selección de soluciones TI","I","A","R","C","I","C"],
+ ["Interoperabilidad con EJE","I","A","R","R","I","C"],
+ ["Formación y gestión del cambio","I","A","C","I","R","I"],
+ ["Ciberseguridad","I","A","C","R","I","I"],
+ ["Tablero público de avance","A","C","R","C","I","I"]
+].map(([a,...r])=>`<tr><td><b>${a}</b></td>${r.map(x=>`<td class="c r-${x}">${x}</td>`).join("")}</tr>`).join("")}</tbody></table></div>
+<p class="note">R = Responsable · A = Aprueba · C = Consultado · I = Informado</p>`)}
+${block("Anexo 3 · Fuentes principales","", list([
+ "Cavero Jara, J. (2026). <i>Transformación digital: definición, dominios, marcos y pasos para delinear un plan.</i> Doctorado UNI.",
+ "Ministerio Público. RFN N° 2696-2026-MP-FN (02/09/2026).",
+ "Ley N° 32374 y Ley N° 32348 (2025).",
+ "RPP (03/09/2025). La PCM señala que la CFE tiene S/ 125 M y 6,1 % de ejecución.",
+ "Programa BID 4959/OC-PE: POA 2023 y POA 2024.",
+ "Ipsos-Proética (2025). XIII Encuesta Nacional sobre Percepciones de la Corrupción.",
+ "Forbes Perú (23/03/2026). Elección del Fiscal de la Nación 2026–2029.",
+ "Fiscalía General del Estado (España). Memorias 2021, 2023 y 2024.",
+ "Ministerio de Justicia de España. Boletín Justicia Digital n.º 14 (2016); LO 1/2025; RDL 6/2023."
+]))}`;
+
+/* ---------- vistas ---------- */
+const home = () => `<div class="view">
+<section class="hero"><div class="wrap">
+ <span class="eyebrow">Ministerio Público – Fiscalía de la Nación · República del Perú</span>
+ <h1>Fiscalía Digital <em>Transparente</em> 2027–2030</h1>
+ <p class="lead">Plan de Transformación Digital para implementar la Carpeta Fiscal Electrónica en los 34 distritos fiscales, con seguridad, trazabilidad y transparencia en cada actuación del proceso penal.</p>
+ <div class="stats tnum">
+  <div class="stat"><span class="n">S/ 125 M</span><span class="l">asignados a la Carpeta Fiscal Electrónica</span></div>
+  <div class="stat"><span class="n red">6,1 %</span><span class="l">de ejecución a setiembre de 2025</span></div>
+  <div class="stat"><span class="n">1 → 34</span><span class="l">distritos fiscales con CFE al 2030</span></div>
+  <div class="stat"><span class="n">10</span><span class="l">mecanismos de blindaje frente a la inestabilidad</span></div>
+ </div>
+</div></section>
+<div class="wrap home-body">
+ <div class="home-head"><div><span class="eyebrow">Estructura del plan</span><h2>Once puntos, en el orden del documento</h2></div><p>Selecciona un punto para ver su detalle. Durante la exposición, avanza con las flechas del teclado.</p></div>
+ <div class="grid">${S.map((s,i)=>`<button class="card" type="button" data-go="${s.id}"><span class="num">${pad(i+1)} · ${s.ref}</span><h3>${s.t}</h3><p>${s.s}</p><span class="go">Ver detalle →</span></button>`).join("")}</div>
+ <div class="block" style="margin-top:12px"><span class="eyebrow">Hacia dónde vamos</span><div class="levels-strip">
+  <div class="lv"><b>1 · Digitación</b><span>Escanear carpetas. Donde está hoy gran parte del MP.</span></div>
+  <div class="lv"><b>2 · Digitalización</b><span>CFE con firma e interoperabilidad con el EJE (2027–2029).</span></div>
+  <div class="lv on"><b>3 · Transformación digital</b><span>Fiscalía orientada al dato y al ciudadano (2030).</span></div>
+ </div></div>
+</div></div>`;
+
+const section = i => {
+ const s = S[i], prev = S[i-1], next = S[i+1];
+ return `<div class="view">
+ <section class="sec-head"><div class="wrap">
+  <div class="crumb"><button type="button" data-go="inicio">Portada</button><span>/</span><span>${s.ref}</span></div>
+  <h2><span class="big-n">${pad(i+1)}</span> ${s.t}</h2>
+  <p class="lead">${s.s}</p>
+ </div></section>
+ <div class="wrap sec-body">${V[s.id]()}</div>
+ <div class="wrap pager">
+  <button type="button" ${prev?`data-go="${prev.id}"`:"disabled"}><small>← Anterior</small><b>${prev?prev.t:""}</b></button>
+  <button type="button" class="nx" data-go="${next?next.id:"inicio"}"><small>${next?"Siguiente →":"Volver →"}</small><b>${next?next.t:"Portada"}</b></button>
+ </div></div>`;
+};
+
+const app = document.getElementById("app"), dots = document.getElementById("dots");
+dots.innerHTML = S.map((s,i)=>`<button type="button" data-go="${s.id}" title="${s.t}">${i+1}</button>`).join("");
+let cur = -1;
+
+function show(id, push=true){
+ const i = S.findIndex(s=>s.id===id);
+ cur = i;
+ app.innerHTML = i<0 ? home() : section(i);
+ dots.querySelectorAll("button").forEach((b,k)=>b.setAttribute("aria-current", k===i));
+ document.title = "Fiscalía Digital Transparente";
+ if (id==="niveles") initTabs();
+ window.scrollTo({top:0});
+ if (push) try{ history.replaceState(null,"", i<0 ? location.pathname : "#"+id); }catch(e){}
+}
+function initTabs(){
+ const tabs = document.querySelectorAll("#dom-tabs button"), panel = document.getElementById("dom-panel");
+ const set = k => { tabs.forEach((t,j)=>t.setAttribute("aria-selected", j===k)); panel.innerHTML = DOM[k](); };
+ tabs.forEach(t=>t.addEventListener("click",()=>set(+t.dataset.i)));
+ set(0);
+}
+document.addEventListener("click", e=>{
+ const g = e.target.closest("[data-go]");
+ if (g) show(g.dataset.go);
+});
+document.getElementById("home-btn").addEventListener("click",()=>show("inicio"));
+document.getElementById("fs-btn").addEventListener("click",()=>{
+ const d = document.documentElement;
+ try{ (document.fullscreenElement ? document.exitFullscreen() : d.requestFullscreen()).catch(()=>{}); }catch(e){}
+});
+document.addEventListener("keydown", e=>{
+ if (e.target.closest("input,textarea")) return;
+ if (e.key==="ArrowRight"){ show(cur+1<S.length ? S[cur+1].id : "inicio"); }
+ else if (e.key==="ArrowLeft"){ show(cur-1>=0 ? S[cur-1].id : "inicio"); }
+ else if (e.key==="Home"||e.key==="Escape"&&!document.fullscreenElement){ show("inicio"); }
+ else if (e.key==="f"||e.key==="F"){ document.getElementById("fs-btn").click(); }
+});
+window.addEventListener("hashchange",()=>show(location.hash.slice(1)||"inicio",false));
+show(location.hash.slice(1)||"inicio", false);
+</script>
